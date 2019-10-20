@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_D2,0
+NHEJ_D2,704
+Unidentified_Deletion_D2,0
+Insert_Dominant_D2,20
+label,Frequency
+MMEJ_D2,0
+NHEJ_D2,704
+Unidentified_Deletion_D2,0
+Insert_Dominant_D2,20

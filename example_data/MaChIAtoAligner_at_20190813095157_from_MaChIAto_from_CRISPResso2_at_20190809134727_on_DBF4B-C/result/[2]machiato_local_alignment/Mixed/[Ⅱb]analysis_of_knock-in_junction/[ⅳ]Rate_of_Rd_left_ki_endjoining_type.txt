@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_Rd,0
+NHEJ_Rd,0
+Unidentified_Deletion_Rd,0
+Insert_Dominant_Rd,43
+label,Frequency
+MMEJ_Rd,0
+NHEJ_Rd,0
+Unidentified_Deletion_Rd,0
+Insert_Dominant_Rd,43

@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_<Rd,30
+NHEJ_<Rd,6
+Unidentified_Deletion_<Rd,0
+Insert_Dominant_<Rd,2
+label,Frequency
+MMEJ_<Rd,30
+NHEJ_<Rd,6
+Unidentified_Deletion_<Rd,0
+Insert_Dominant_<Rd,2

@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_I>1,26
+NHEJ_I>1,2
+Unidentified_Deletion_I>1,4
+Insert_Dominant_I>1,603
+label,Frequency
+MMEJ_I>1,26
+NHEJ_I>1,2
+Unidentified_Deletion_I>1,4
+Insert_Dominant_I>1,603

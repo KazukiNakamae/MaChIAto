@@ -1,0 +1,9 @@
+Class,Frequency,Percentage
+Unidentified_Deletion_<Ip,0,0
+Unidentified_Deletion_>Id,0,0
+Unidentified_Deletion_Id,0,0
+Unidentified_Deletion_Id-Ip,1,100
+Unidentified_Deletion_Ip,0,0
+Unidentified_Deletion_<Rd,0,0
+Unidentified_Deletion_>Rd,0,0
+Unidentified_Deletion_Rd,0,0

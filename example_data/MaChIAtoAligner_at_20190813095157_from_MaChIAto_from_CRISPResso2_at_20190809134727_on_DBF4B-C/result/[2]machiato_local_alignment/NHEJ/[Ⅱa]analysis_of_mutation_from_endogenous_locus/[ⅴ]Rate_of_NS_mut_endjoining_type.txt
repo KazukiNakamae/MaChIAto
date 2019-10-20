@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_NS,1
+NHEJ_NS,1
+Unidentified_Deletion_NS,0
+Insert_Dominant_NS,1
+label,Frequency
+MMEJ_NS,1
+NHEJ_NS,1
+Unidentified_Deletion_NS,0
+Insert_Dominant_NS,1

@@ -1,0 +1,9 @@
+Class,Frequency,Percentage
+NHEJ_<Ip,0,0
+NHEJ_>Id,0,0
+NHEJ_Id,0,0
+NHEJ_Id-Ip,117,95.1219512195122
+NHEJ_Ip,0,0
+NHEJ_<Rd,6,4.8780487804878
+NHEJ_>Rd,0,0
+NHEJ_Rd,0,0

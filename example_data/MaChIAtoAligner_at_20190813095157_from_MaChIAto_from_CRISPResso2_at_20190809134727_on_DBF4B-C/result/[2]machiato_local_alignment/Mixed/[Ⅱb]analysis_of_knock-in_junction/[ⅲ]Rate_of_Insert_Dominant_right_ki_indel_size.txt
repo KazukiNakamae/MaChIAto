@@ -1,0 +1,9 @@
+Class,Frequency,Percentage
+Insert_Dominant_<Ip,0,0
+Insert_Dominant_>Id,235,28.8343558282209
+Insert_Dominant_Id,561,68.8343558282209
+Insert_Dominant_Id-Ip,0,0
+Insert_Dominant_Ip,0,0
+Insert_Dominant_<Rd,2,0.245398773006135
+Insert_Dominant_>Rd,0,0
+Insert_Dominant_Rd,17,2.08588957055215

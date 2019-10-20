@@ -1,0 +1,10 @@
+CACATCGACTTCTCTCTGCGCTCTCCCTACGGGGGTGGCC	microhomology	deletion length	score of a pattern
+CAC- - - - - - - - - - - - - - - - - - - - - - - - - - - GGGGGTGGCC	AC	27	77.7
+CACATCGAC- - - - - - - - - - - - - - - - - - - - - GGGGGTGGCC	AC	21	105.0
+CACATCG- - - - - - - - - - - - - - - - - - - - - - - - GGGGTGGCC	CG	24	120.4
+CACATCGACTTCTCTCTGCG- - - - - - - - - - - GGGGTGGCC	CG	11	230.8
+CACATCGACTTCTCTCTG- - - - - - - - - - - - - - - - - - - GCC	TG	19	116.1
+CACATCGACTTCTCTCTGC- - - - - - - - - - - - - - - - - - - - C	GC	20	147.2
+CACATCGACTTCTCTCTGCGC- - - - - - - - - - - - - - - - - - C	GC	18	162.8
+CACATCGACTTCTCTCTGCGCTCTCC- - - - - - - - - - - - - - 	CC	14	198.8
+CACATCGACTTCTCTCTGCGCTCTCCC- - - - - - - - - - - - - 	CC	13	208.8

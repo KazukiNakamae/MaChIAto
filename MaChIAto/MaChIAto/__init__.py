@@ -1,0 +1,1 @@
+from MaChIAto.__main__ import *

@@ -1,0 +1,79 @@
+[Command used]:
+CRISPResso /Users/smg/anaconda/envs/CRISPResso_env/bin/crispresso -r1 /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R1_001.fastq.sickled20.fastq -r2 /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R2_001.fastq.sickled20.fastq -a tttctgagcaaagaagtaagttacatcgtgtccagccgcagagaagtaaaggcagagagcagtgggaaaagccatagaggctgccctagccctagccccagtgaggtcagagtggaaacatcggccatggttgatccaaaaggcagccaccccaggccttcacggaaacccgttgactcggtaagaacctcatgtaggaaaggtatgctgtgtaaacaaaggaagtaggctttggtgagccttttaaggcagtctctggttttaatttcatctggattaatttaatctctcatttgaattcagggactgagaatattttatcatagctctg -g TTCACGGAAACCCGTTGACT -e tttctgagcaaagaagtaagttacatcgtgtccagccgcagagaagtaaaggcagagagcagtgggaaaagccatagaggctgccctagccctagccccagtgaggtcagagtggaaacatcggccatggttgatCCAAAAGGCAGCCACCCCAGGCCTTCACGGAAACCCGTTGGACTATAAGGACCACGACGGAGACTACAAGGATCATGATATTGATTACAAAGACGATGACGATAAGACTCGGTAAGAACCTCATGTAGGAAAGGTATGCTGTGTAAacaaaggaagtaggctttggtgagccttttaaggcagtctctggttttaatttcatctggattaatttaatctctcatttgaattcagggactgagaatattttatcatagctctg -d GACTATAAGGACCACGACGGAGACTACAAGGATCATGATATTGATTACAAAGACGATGACGATAAG --hide_mutations_outside_window_NHEJ --hdr_perfect_alignment_threshold 99.5 --keep_intermediate -o /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso_output -n 20190320234156_DBF4B-C
+
+[Execution log]:
+Estimating average read length...
+Merging paired sequences with Flash...
+[FLASH] WARNING: --read-len (-r) has no effect when --max-overlap (-M) is also
+specified!
+[FLASH] WARNING: --fragment-len (-f) has no effect when --max-overlap (-M) is
+also specified!
+[FLASH] WARNING: --fragment-len-stddev (-s) has no effect when --max-overlap
+(-M) is also specified!
+[FLASH] Starting FLASH v1.2.11
+[FLASH] Fast Length Adjustment of SHort reads
+[FLASH]  
+[FLASH] Input files:
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R1_001.fastq.sickled20.fastq
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R2_001.fastq.sickled20.fastq
+[FLASH]  
+[FLASH] Output files:
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso_output/CRISPResso_on_20190320234156_DBF4B-C/out.extendedFrags.fastq.gz
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso_output/CRISPResso_on_20190320234156_DBF4B-C/out.notCombined_1.fastq.gz
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso_output/CRISPResso_on_20190320234156_DBF4B-C/out.notCombined_2.fastq.gz
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso_output/CRISPResso_on_20190320234156_DBF4B-C/out.hist
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso_output/CRISPResso_on_20190320234156_DBF4B-C/out.histogram
+[FLASH]  
+[FLASH] Parameters:
+[FLASH]     Min overlap:           4
+[FLASH]     Max overlap:           100
+[FLASH]     Max mismatch density:  0.250000
+[FLASH]     Allow "outie" pairs:   true
+[FLASH]     Cap mismatch quals:    false
+[FLASH]     Combiner threads:      8
+[FLASH]     Input format:          FASTQ, phred_offset=33
+[FLASH]     Output format:         FASTQ, phred_offset=33, gzip
+[FLASH]  
+[FLASH] Starting reader and writer threads
+[FLASH] Starting 8 combiner threads
+[FLASH] Processed 25000 read pairs
+[FLASH] Processed 36957 read pairs
+[FLASH]  
+[FLASH] Read combination statistics:
+[FLASH]     Total pairs:      36957
+[FLASH]     Combined pairs:   36692
+[FLASH]         Innie pairs:   36595 (99.74% of combined)
+[FLASH]         Outie pairs:   97 (0.26% of combined)
+[FLASH]     Uncombined pairs: 265
+[FLASH]     Percent combined: 99.28%
+[FLASH]  
+[FLASH] Writing histogram files.
+[FLASH] WARNING: An unexpectedly high proportion of combined pairs (97.83%)
+overlapped by more than 100 bp, the --max-overlap (-M) parameter.  Consider
+increasing this parameter.  (As-is, FLASH is penalizing overlaps longer than
+100 bp when considering them for possible combining!)
+[FLASH]  
+[FLASH] FLASH v1.2.11 complete!
+[FLASH] 0.461 seconds elapsed
+[FLASH] Finished with 4 warnings (see above)
+Done!
+Preparing files for the alignment...
+Done!
+Aligning sequences...
+Needleman-Wunsch global alignment of two sequences
+Needleman-Wunsch global alignment of two sequences
+Done!
+Align sequences to reverse complement of the amplicon...
+Done!
+Needleman-Wunsch global alignment of two sequences
+Needleman-Wunsch global alignment of two sequences
+Quantifying indels/substitutions...
+Done!
+Calculating indel distribution based on the length of the reads...
+Done!
+Calculating alleles frequencies...
+Done!
+Making Plots...
+Done!
+Saving processed data...
+All Done!

@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_>Id,1
+NHEJ_>Id,0
+Unidentified_Deletion_>Id,1
+Insert_Dominant_>Id,235
+label,Frequency
+MMEJ_>Id,1
+NHEJ_>Id,0
+Unidentified_Deletion_>Id,1
+Insert_Dominant_>Id,235

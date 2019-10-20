@@ -1,0 +1,7 @@
+Class,Frequency,Percentage
+Unidentified_Deletion_D1,0,0
+Unidentified_Deletion_D2,0,0
+Unidentified_Deletion_D>2,0,0
+Unidentified_Deletion_I1,0,0
+Unidentified_Deletion_I>1,4,100
+Unidentified_Deletion_NS,0,0

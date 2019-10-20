@@ -1,0 +1,4 @@
+Class,Frequency,Percentage
+P_S0,79,96.3414634146341
+P_S1,3,3.65853658536585
+P_S>1,0,0

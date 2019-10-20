@@ -1,0 +1,5 @@
+label,Frequency
+MMEJ_Ip,0
+NHEJ_Ip,0
+Unidentified_Deletion_Ip,0
+Insert_Dominant_Ip,0

@@ -1,0 +1,7 @@
+Class,Frequency,Percentage
+Insert_Dominant_D1,0,0
+Insert_Dominant_D2,20,0.97799511002445
+Insert_Dominant_D>2,18,0.880195599022005
+Insert_Dominant_I1,1403,68.6063569682152
+Insert_Dominant_I>1,603,29.4865525672372
+Insert_Dominant_NS,1,0.0488997555012225

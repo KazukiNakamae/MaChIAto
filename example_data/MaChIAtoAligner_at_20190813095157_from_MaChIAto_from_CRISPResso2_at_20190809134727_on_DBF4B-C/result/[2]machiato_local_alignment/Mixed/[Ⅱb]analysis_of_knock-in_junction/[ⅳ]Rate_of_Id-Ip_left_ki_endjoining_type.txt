@@ -1,0 +1,10 @@
+label,Frequency
+MMEJ_Id-Ip,166
+NHEJ_Id-Ip,116
+Unidentified_Deletion_Id-Ip,1
+Insert_Dominant_Id-Ip,8
+label,Frequency
+MMEJ_Id-Ip,166
+NHEJ_Id-Ip,116
+Unidentified_Deletion_Id-Ip,1
+Insert_Dominant_Id-Ip,8

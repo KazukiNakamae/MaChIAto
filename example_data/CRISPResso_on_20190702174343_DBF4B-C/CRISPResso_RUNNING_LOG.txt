@@ -1,0 +1,70 @@
+CRISPResso version 2.0.29
+[Command used]:
+/Users/smg/anaconda/envs/CRISPResso2_env/bin/crispresso -r1 /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R1_001.fastq.sickled20.fastq -r2 /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R2_001.fastq.sickled20.fastq -a TTTCTGAGCAAAGAAGTAAGTTACATCGTGTCCAGCCGCAGAGAAGTAAAGGCAGAGAGCAGTGGGAAAAGCCATAGAGGCTGCCCTAGCCCTAGCCCCAGTGAGGTCAGAGTGGAAACATCGGCCATGGTTGATCCAAAAGGCAGCCACCCCAGGCCTTCACGGAAACCCGTTGACTCGGTAAGAACCTCATGTAGGAAAGGTATGCTGTGTAAACAAAGGAAGTAGGCTTTGGTGAGCCTTTTAAGGCAGTCTCTGGTTTTAATTTCATCTGGATTAATTTAATCTCTCATTTGAATTCAGGGACTGAGAATATTTTATCATAGCTCTG -g TTCACGGAAACCCGTTGACT -e TTTCTGAGCAAAGAAGTAAGTTACATCGTGTCCAGCCGCAGAGAAGTAAAGGCAGAGAGCAGTGGGAAAAGCCATAGAGGCTGCCCTAGCCCTAGCCCCAGTGAGGTCAGAGTGGAAACATCGGCCATGGTTGATCCAAAAGGCAGCCACCCCAGGCCTTCACGGAAACCCGTTGGACTATAAGGACCACGACGGAGACTACAAGGATCATGATATTGATTACAAAGACGATGACGATAAGACTCGGTAAGAACCTCATGTAGGAAAGGTATGCTGTGTAAACAAAGGAAGTAGGCTTTGGTGAGCCTTTTAAGGCAGTCTCTGGTTTTAATTTCATCTGGATTAATTTAATCTCTCATTTGAATTCAGGGACTGAGAATATTTTATCATAGCTCTG --keep_intermediate -o /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output -n 20190702174343_DBF4B-C
+
+[Execution log]:
+Estimating average read length...
+Merging paired sequences with Flash...
+Running FLASH command: flash /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R1_001.fastq.sickled20.fastq /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R2_001.fastq.sickled20.fastq --min-overlap 10 --max-overlap 100 --allow-outies -z -d /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C -o out >>/Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C/CRISPResso_RUNNING_LOG.txt 2>&1
+[FLASH] Starting FLASH v1.2.11
+[FLASH] Fast Length Adjustment of SHort reads
+[FLASH]  
+[FLASH] Input files:
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R1_001.fastq.sickled20.fastq
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/fastq_sickled20/DBF4B-C_S15_L001_R2_001.fastq.sickled20.fastq
+[FLASH]  
+[FLASH] Output files:
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C/out.extendedFrags.fastq.gz
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C/out.notCombined_1.fastq.gz
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C/out.notCombined_2.fastq.gz
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C/out.hist
+[FLASH]     /Volumes/smg_ex/nakamae/PITCh_prediction/NGSanalysis_201903/CRISPResso2_output/CRISPResso_on_20190702174343_DBF4B-C/out.histogram
+[FLASH]  
+[FLASH] Parameters:
+[FLASH]     Min overlap:           10
+[FLASH]     Max overlap:           100
+[FLASH]     Max mismatch density:  0.250000
+[FLASH]     Allow "outie" pairs:   true
+[FLASH]     Cap mismatch quals:    false
+[FLASH]     Combiner threads:      8
+[FLASH]     Input format:          FASTQ, phred_offset=33
+[FLASH]     Output format:         FASTQ, phred_offset=33, gzip
+[FLASH]  
+[FLASH] Starting reader and writer threads
+[FLASH] Starting 8 combiner threads
+[FLASH] Processed 25000 read pairs
+[FLASH] Processed 36957 read pairs
+[FLASH]  
+[FLASH] Read combination statistics:
+[FLASH]     Total pairs:      36957
+[FLASH]     Combined pairs:   36613
+[FLASH]         Innie pairs:   36535 (99.79% of combined)
+[FLASH]         Outie pairs:   78 (0.21% of combined)
+[FLASH]     Uncombined pairs: 344
+[FLASH]     Percent combined: 99.07%
+[FLASH]  
+[FLASH] Writing histogram files.
+[FLASH] WARNING: An unexpectedly high proportion of combined pairs (98.31%)
+overlapped by more than 100 bp, the --max-overlap (-M) parameter.  Consider
+increasing this parameter.  (As-is, FLASH is penalizing overlaps longer than
+100 bp when considering them for possible combining!)
+[FLASH]  
+[FLASH] FLASH v1.2.11 complete!
+[FLASH] 0.443 seconds elapsed
+[FLASH] Finished with 1 warning (see above)
+Done!
+Aligning sequences...
+Processing reads; N_TOT_READS: 0 N_COMPUTED_ALN: 0 N_CACHED_ALN: 0 N_COMPUTED_NOTALN: 0 N_CACHED_NOTALN: 0
+Processing reads; N_TOT_READS: 10000 N_COMPUTED_ALN: 2662 N_CACHED_ALN: 7228 N_COMPUTED_NOTALN: 37 N_CACHED_NOTALN: 73
+Processing reads; N_TOT_READS: 20000 N_COMPUTED_ALN: 4597 N_CACHED_ALN: 15164 N_COMPUTED_NOTALN: 77 N_CACHED_NOTALN: 162
+Processing reads; N_TOT_READS: 30000 N_COMPUTED_ALN: 6629 N_CACHED_ALN: 22999 N_COMPUTED_NOTALN: 110 N_CACHED_NOTALN: 262
+Finished reads; N_TOT_READS: 36613 N_COMPUTED_ALN: 7815 N_CACHED_ALN: 28342 N_COMPUTED_NOTALN: 134 N_CACHED_NOTALN: 322
+Done!
+Quantifying indels/substitutions...
+Done!
+Calculating allele frequencies...
+Done!
+Saving processed data...
+Making Plots...
+Done!
+Analysis Complete!
