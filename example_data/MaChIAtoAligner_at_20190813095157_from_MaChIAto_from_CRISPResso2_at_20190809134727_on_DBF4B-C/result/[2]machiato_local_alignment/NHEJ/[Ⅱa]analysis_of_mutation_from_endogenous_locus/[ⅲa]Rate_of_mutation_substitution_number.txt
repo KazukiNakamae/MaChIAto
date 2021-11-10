@@ -1,4 +1,0 @@
-Class,Frequency,Percentage
-N,1,100
-S1,0,0
-S>1,0,0
