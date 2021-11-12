@@ -108,3 +108,20 @@ I developed Prime Editing analysis mode.
 #### MaChIAto Reviewer version beta2.3
 ##### Deleted
 - Codes that only works in local environment of a developer
+
+#### Update commands
+
+```bash
+cd /Users/nedo01/nakamae_github;
+# git clone https://github.com/KazukiNakamae/MaChIAto.git;
+cd MaChIAto;
+# 更新ファイルの登録
+git add --all;
+# コミット
+git commit -m "Upload the latest version";
+# リモートリポジトリの設定
+git remote add origin https://github.com//KazukiNakamae/MaChIAto.git;
+# mainへプッシュ
+git push origin master;
+```
+https://github.com/KazukiNakamae/MaChIAto
