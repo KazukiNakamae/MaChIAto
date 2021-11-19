@@ -836,6 +836,8 @@ SaveBarPlot <- function(position.count.table, color.code, file.name, xlab, ylab)
   xlab(xlab) +
   ylab(ylab)
   # plot(position.count.p)
+  saveRDS(position.count.table, file = paste0(file.name, ".rds"))
+  write.csv(position.count.table, paste0(file.name, ".csv"))
   ggsave(file = file.name, plot = position.count.p, dpi = 300, width = 0.1 * length(position.count.table$Frequency), height = 3, limitsize = FALSE)
   options(warn = 0)
   message(paste("Save bar plot in ", file.name, sep=""))
@@ -936,9 +938,59 @@ SaveVariantsData <- function(crispr.set, out.dir, range.vec = -35:35, mut.type){
     dev.off()
     message(paste("Save variants barplot in ", file.path(out.dir, "variants.barplot.pdf"), sep=""))
 
-    # browser()
+    ### Frame Classification
+    if(nrow(variantCounts(crispr.set)) > 0){
+
+      # classify by frame
+      variants.kinds.vec = rownames(variantCounts(crispr.set))
+      cording.vec = rep("coding", times = length(variants.kinds.vec))
+      names(cording.vec) <- variants.kinds.vec
+      if(any(names(cording.vec) %in% "no variant")){
+        cording.vec["no variant"] = "No variant"
+      }
+      if(length(which(str_detect(names(cording.vec), pattern="SNV"))) > 0){
+        cording.vec[str_detect(names(cording.vec), pattern="SNV")] = "Substitutions"
+      }
+      byLoc <- crispr.set$classifyCodingBySize(cording.vec, cutoff = 300)
+
+      # make data for plot
+      if(length(which(str_detect(byLoc, pattern="inframe indel"))) > 0){
+        byLoc[str_detect(byLoc, pattern="inframe indel")] = "+0 frame"
+      }
+      if(length(which(str_detect(byLoc, pattern="frameshift indel"))) > 0){
+        byLoc[str_detect(byLoc, pattern="frameshift indel")] = "+1, +2 frame"
+      }
+      variants.count.df <- variantCounts(crispr.set)
+      frame.df <- data.frame(Class=byLoc, Count=variants.count.df[, 1])
+
+      # plot the rate of frame
+      frame.sum.df <- frame.df %>% group_by(Class) %>% summarise(Count = sum(Count))
+      frame.sum.df <- frame.sum.df %>% mutate(Data = "Classification")
+      total.reads = sum(frame.sum.df$Count)
+
+      options(warn = -1)
+      frame.plot <- ggplot(frame.sum.df, aes(x = Data, y = Count, fill = Class))
+      frame.plot <- frame.plot + geom_col()
+      frame.plot <- frame.plot + geom_text(aes(label = paste0(Count, "Reads(", round(Count/total.reads*100, digits = 1), "%)")), position = position_stack(vjust = 0.5))
+      frame.plot <- frame.plot + scale_fill_brewer(palette = "Set2")
+      frame.plot <- frame.plot + theme_minimal(base_size = 16)
+      frame.plot <- frame.plot + ylab("Reads")
+      frame.plot <- frame.plot + xlab(NULL)
+      ggsave(file = file.path(out.dir, "Read_count_per_frame.png"), plot = frame.plot, dpi = 300, width = 10, height = 10, limitsize = FALSE)
+      options(warn = 0)
+      message(paste("Save bar plot in ", file.path(out.dir, "Read_count_per_frame.png"), sep=""))
+
+      # save frame information
+      saveRDS(frame.df, file = file.path(out.dir, "frame.df.rds")) 
+      write.csv(frame.df, file.path(out.dir, "frame.count.csv"))
+      saveRDS(frame.sum.df, file = file.path(out.dir, "Read_count_per_frame.png.rds")) 
+      write.csv(frame.sum.df, file.path(out.dir, "Read_count_per_frame.png.csv"))
+    }
+
+    # plot and save indel position data
     variants.count.total.list <- MakeTotalMutList(crispr.set, mut.type)
     saveRDS(variants.count.total.list, file = file.path(out.dir, "variants.count.total.list.rds"))
+    cat(capture.output(print(variants.count.total.list), file=file.path(out.dir, "variants.count.total.list.txt")))
     # each mutation type of position plot
     SavePositionBarPlot(variants.count.total.list, out.dir, mut.type = "deletion", range.vec = range.vec)
     SavePositionBarPlot(variants.count.total.list, out.dir, mut.type = "insertion", range.vec = range.vec)
@@ -1332,7 +1384,7 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Percentage=aggregated.is.sn.table.list$aggregated.substitution.number.table$Frequency / sum(aggregated.is.sn.table.list$aggregated.substitution.number.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number.txt", sep=""))
+    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number.rds", sep="")))
@@ -1350,7 +1402,7 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Percentage=aggregated.is.sn.table.list$aggregated.indels.size.table$Frequency / sum(aggregated.is.sn.table.list$aggregated.indels.size.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size.txt", sep=""))
+    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size.rds", sep="")))
@@ -1371,7 +1423,7 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Percentage=aggregated.mutation.merge.size.number.table$Frequency / sum(aggregated.mutation.merge.size.number.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number.txt", sep=""))
+    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number.rds", sep="")))
@@ -1392,7 +1444,7 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Percentage=aggregated.mutation.merge.size.number.without.n.table$Frequency / sum(aggregated.mutation.merge.size.number.without.n.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).txt", sep=""))
+    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).rds", sep="")))
@@ -1446,7 +1498,7 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Percentage=aggregated.correct.is.sn.table.list$aggregated.substitution.number.table$Frequency / sum(aggregated.correct.is.sn.table.list$aggregated.substitution.number.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.substitution.number.class.count.table, file = file.path(outdir, paste("[ⅱa]", ki.type, "_Rate_of_knock-in_substitution_number.txt", sep=""))
+    write.table(aggregated.substitution.number.class.count.table, file = file.path(outdir, paste("[ⅱa]", ki.type, "_Rate_of_knock-in_substitution_number.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.substitution.number.class.count.table, file = file.path(outdir, paste("[ⅱa]", ki.type, "_Rate_of_knock-in_substitution_number.rds", sep="")))
@@ -1465,7 +1517,7 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Percentage=aggregated.mutation.merge.size.table$Frequency / sum(aggregated.mutation.merge.size.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅱb]", ki.type, "_Rate_of_knock-in_indel_size.txt", sep=""))
+    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅱb]", ki.type, "_Rate_of_knock-in_indel_size.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅱb]", ki.type, "_Rate_of_knock-in_indel_size.rds", sep="")))
@@ -1486,7 +1538,7 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Percentage=aggregated.mutation.merge.size.number.table$Frequency / sum(aggregated.mutation.merge.size.number.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.merge.size.number.class.count.table, file = file.path(outdir, paste("[ⅱc]", ki.type, "_Rate_of_knock-in_substitution_and_indels.txt", sep=""))
+    write.table(aggregated.merge.size.number.class.count.table, file = file.path(outdir, paste("[ⅱc]", ki.type, "_Rate_of_knock-in_substitution_and_indels.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.merge.size.number.class.count.table, file = file.path(outdir, paste("[ⅱc]", ki.type, "_Rate_of_knock-in_substitution_and_indels.rds", sep="")))
@@ -1507,7 +1559,7 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Percentage=aggregated.mutation.merge.size.number.without.p_s0.table$Frequency / sum(aggregated.mutation.merge.size.number.without.p_s0.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.merge.size.number.without.p_s0.class.count.table, file = file.path(outdir, paste("[ⅱd]", ki.type, "_Rate_of_knock-in_substitution_and_indels(without_precise_ki).txt", sep=""))
+    write.table(aggregated.merge.size.number.without.p_s0.class.count.table, file = file.path(outdir, paste("[ⅱd]", ki.type, "_Rate_of_knock-in_substitution_and_indels(without_precise_ki).csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.merge.size.number.without.p_s0.class.count.table, file = file.path(outdir, paste("[ⅱd]", ki.type, "_Rate_of_knock-in_substitution_and_indels(without_precise_ki).rds", sep="")))
@@ -1534,11 +1586,13 @@ RunKiTotalIndelAnalysis <- function(precise.is.sn.list, imprecise.is.sn.list, re
     # make indel size bar plot
     if(!is.null(ki.is.sn.list$ki.correct.is.sn.list)){
       saveRDS(ki.is.sn.list$ki.correct.is.sn.list$indels.size.table , file = file.path(save.dir, paste0("[ⅰa]Distribution_of_indel_size_on_correct_", ki.type, "_junction.table.rds")))
+      write.csv(ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(save.dir, paste0("[ⅰa]Distribution_of_indel_size_on_correct_", ki.type, "_junction.table.csv")))
       SaveIndelSizeReadBarPlot(ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(save.dir, paste0("[ⅰa]Distribution_of_indel_size_on_correct_", ki.type, "_junction.png")))
     }
     # make substitution number bar plot
     if(!is.null(ki.is.sn.list$ki.correct.is.sn.list$substitution.number.table)){
       saveRDS(ki.is.sn.list$ki.correct.is.sn.list$substitution.number.table , file = file.path(save.dir, paste0("[ⅰb]Distribution_of_substitution_number_on_correct_", ki.type, "_junction.table.rds")))
+      write.csv(ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(save.dir, paste0("[ⅰb]Distribution_of_substitution_number_on_correct_", ki.type, "_junction.table.csv")))
       SaveSubstitutionNumberReadBarPlot(ki.is.sn.list$ki.correct.is.sn.list$substitution.number.table, file.path(save.dir, paste0("[ⅰb]Distribution_of_substitution_number_on_correct_", ki.type, "_junction.png")))
     }
 
@@ -1561,7 +1615,7 @@ SaveInDelByTypePieChart <- function(aggregated.indels.size.table, ej.type, col.v
       , Percentage=aggregated.indels.size.table$Frequency / sum(aggregated.indels.size.table$Frequency) * 100
     )
     options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size.txt", sep=""))
+    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size.csv", sep=""))
       , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
     options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size.rds", sep="")))
@@ -1603,7 +1657,7 @@ SaveInDelBySizePieChart <- function(
     )
     if(!is.null(ej.type.by.size.table)){
       options(warn=-1) # "appending column names to file" is no problem.
-      write.table(ej.type.by.size.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type.txt", sep=""))
+      write.table(ej.type.by.size.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type.csv", sep=""))
         , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
       options(warn=0)
       saveRDS(ej.type.by.size.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type.rds", sep="")))
@@ -1614,10 +1668,10 @@ SaveInDelBySizePieChart <- function(
           , Percentage=ej.type.by.size.table$Frequency / sum(ej.type.by.size.table$Frequency) * 100
         )
         options(warn=-1) # "appending column names to file" is no problem.
-        write.table(ej.type.by.size.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type.txt", sep=""))
+        write.table(ej.type.by.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.csv", sep=""))
           , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
         options(warn=0)
-        saveRDS(ej.type.by.size.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type.rds", sep="")))
+        saveRDS(ej.type.by.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.rds", sep="")))
         SavePieChart(ej.type.by.size.class.count.table
           , c("#ACF2F2", "#F2A0DC", "#D288F2", "#F2C9F0")
           , "Reads"
@@ -1751,18 +1805,22 @@ SaveImKiIndelSizePlot = function(null.precise.is.sn.list.set, imprecise.is.sn.li
   )
   if(!is.null(mmej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table)){
     saveRDS(mmej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table , file = file.path(outdir, paste0("[iiib]Distribution_of_MMEJ_deletion_size_on_correct_", junction.name, ".table.rds")))
+    write.csv(mmej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiib]Distribution_of_MMEJ_deletion_size_on_correct_", junction.name, ".table.csv")))
     SaveIndelSizeReadBarPlot(mmej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiib]Distribution_of_MMEJ_deletion_size_on_correct_", junction.name, ".png")))
   }
   if(!is.null(nhej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table)){
     saveRDS(nhej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table , file = file.path(outdir, paste0("[iiic]Distribution_of_NHEJ_deletion_size_on_correct_", junction.name, ".table.rds")))
+    write.csv(nhej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiic]Distribution_of_NHEJ_deletion_size_on_correct_", junction.name, ".table.csv")))
     SaveIndelSizeReadBarPlot(nhej.ki.is.sn.list$ki.correct.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiic]Distribution_of_NHEJ_deletion_size_on_correct_", junction.name, ".png")))
   }
   if(!is.null(mmej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table)){
     saveRDS(mmej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table , file = file.path(outdir, paste0("[iiid]Distribution_of_MMEJ_deletion_size_on_reverse_", junction.name, ".table.rds")))
+    write.csv(mmej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiid]Distribution_of_MMEJ_deletion_size_on_reverse_", junction.name, ".table.csv")))
     SaveIndelSizeReadBarPlot(mmej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiid]Distribution_of_MMEJ_deletion_size_on_reverse_", junction.name, ".png")))
   }
   if(!is.null(nhej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table)){
     saveRDS(nhej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table , file = file.path(outdir, paste0("[iiie]Distribution_of_NHEJ_deletion_size_on_reverse_", junction.name, ".table.rds")))
+    write.csv(nhej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiie]Distribution_of_NHEJ_deletion_size_on_reverse_", junction.name, ".table.csv")))
     SaveIndelSizeReadBarPlot(nhej.ki.is.sn.list$ki.reverse.is.sn.list$indels.size.table, file.path(outdir, paste0("[iiie]Distribution_of_NHEJ_deletion_size_on_reverse_", junction.name, ".png")))
   }
 
@@ -1891,6 +1949,7 @@ SaveMlTlScatterPlot <- function(variants.count.total.list, save.dir, type = c("m
     }
   }
   saveRDS(plot.df , file = file.path(save.dir, paste0(id.number, "]Distribution_of_", type, "_MMEJ_Microhomology_length_Trimmed_Seq_length.table.rds")))
+  write.csv(plot.df, file.path(save.dir, paste0(id.number, "]Distribution_of_", type, "_MMEJ_Microhomology_length_Trimmed_Seq_length.table.csv")))
   if(nrow(plot.df) > 0){
     options(warn=-1)
     ml.tl.scatter.p <- ggplot(data = plot.df, aes(x = mh.len, y = trim.len, color = "#BF9E75")) +
@@ -1967,6 +2026,7 @@ SaveMsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Total frequency in reads")
     # plot(substitution.number.p)
     saveRDS(total.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Microhomology_Sequence_Frequency.table.rds")))
+    write.csv(total.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Microhomology_Sequence_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Microhomology_Sequence_Frequency.png")), plot = total.sum.by.nucleotide.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -1998,6 +2058,7 @@ SaveMsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Number of reads")
     # plot(substitution.number.p)
     saveRDS(mono.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Microhomology_Sequence_Frequency.table.rds")))
+    write.csv(mono.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Microhomology_Sequence_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Microhomology_Sequence_Frequency.png")), plot = mono.mh.sum.by.nucleotide.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2032,6 +2093,7 @@ SaveMsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Number of reads")
     # plot(substitution.number.p)
     saveRDS(di.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Microhomology_Sequence_Frequency.table.rds")))
+    write.csv(di.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Microhomology_Sequence_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Microhomology_Sequence_Frequency.png")), plot = di.mh.sum.by.nucleotide.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2066,6 +2128,7 @@ SaveMsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Total Frequency in Reads") -> mono.trim.len.mh.freq.sum.plot.p # inside frequency * number of read
     # plot(substitution.number.p)
     saveRDS(mono.trim.len.mh.freq.sum.plot.table , file = file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Mono_Frequency.table.rds")))
+    write.csv(mono.trim.len.mh.freq.sum.plot.table, file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Mono_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Mono_Frequency.png")), plot = mono.trim.len.mh.freq.sum.plot.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2089,6 +2152,7 @@ SaveMsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Total Frequency in Reads") -> di.trim.len.mh.freq.sum.plot.p # inside frequency * number of read
     # plot(substitution.number.p)
     saveRDS(di.trim.len.mh.freq.sum.plot.table , file = file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Di_Frequency.table.rds")))
+    write.csv(di.trim.len.mh.freq.sum.plot.table, file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Di_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Di_Frequency.png")), plot = di.trim.len.mh.freq.sum.plot.p, dpi = 300, width = 12, height = 6)  
     options(warn=0)
   }else{
@@ -2097,18 +2161,23 @@ SaveMsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
       ,Frequency = numeric(ncol(freq.df) - 4)
     )
     saveRDS(total.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Microhomology_Sequence_Frequency.table.rds")))
+    write.csv(total.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Microhomology_Sequence_Frequency.table.csv")))
     mono.mh.sum.by.nucleotide.table <- data.frame(
       Nucleotide = factor(colnames(freq.df)[5:8], levels = colnames(freq.df)[5:8])
       ,Frequency = numeric(8 - 4)
     )
     saveRDS(mono.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Microhomology_Sequence_Frequency.table.rds")))
+    write.csv(mono.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Microhomology_Sequence_Frequency.table.csv")))
     di.mh.sum.by.nucleotide.table <- data.frame(
       Nucleotide = factor(colnames(freq.df)[9:ncol(freq.df)], levels = colnames(freq.df)[9:ncol(freq.df)])
       ,Frequency = numeric(ncol(freq.df) - 8)
     )
     saveRDS(di.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Microhomology_Sequence_Frequency.table.rds")))
+    write.csv(di.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Microhomology_Sequence_Frequency.table.csv")))
     saveRDS(data.frame() , file = file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Mono_Frequency.table.rds")))
+    write.csv(data.frame(), file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Mono_Frequency.table.csv")))
     saveRDS(data.frame() , file = file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Di_Frequency.table.rds")))
+    write.csv(data.frame(), file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Microhomology_Sequence_Di_Frequency.table.csv")))
   }
 }
 
@@ -2174,6 +2243,7 @@ SaveTsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Total frequency in reads")
     # plot(substitution.number.p)
     saveRDS(total.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Intervening_Sequence_Frequency.table.rds")))
+    write.csv(total.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Intervening_Sequence_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Intervening_Sequence_Frequency.png")), plot = total.sum.by.nucleotide.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2205,6 +2275,7 @@ SaveTsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Number of reads")
     # plot(substitution.number.p)
     saveRDS(mono.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Intervening_Sequence_Frequency.table.rds")))
+    write.csv(mono.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Intervening_Sequence_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Intervening_Sequence_Frequency.png")), plot = mono.mh.sum.by.nucleotide.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2239,6 +2310,7 @@ SaveTsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Number of reads")
     # plot(substitution.number.p)
     saveRDS(di.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Intervening_Sequence_Frequency.table.rds")))
+    write.csv(di.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Intervening_Sequence_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Intervening_Sequence_Frequency.png")), plot = di.mh.sum.by.nucleotide.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2273,6 +2345,7 @@ SaveTsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Total Frequency in Reads") -> mono.trim.len.mh.freq.sum.plot.p # inside frequency * number of read
     # plot(substitution.number.p)
     saveRDS(mono.trim.len.mh.freq.sum.plot.table , file = file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Mono_Frequency.table.rds")))
+    write.csv(mono.trim.len.mh.freq.sum.plot.table, file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Mono_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Mono_Frequency.png")), plot = mono.trim.len.mh.freq.sum.plot.p, dpi = 300, width = 12, height = 6)
     options(warn=0)
 
@@ -2296,6 +2369,7 @@ SaveTsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
     ylab("Total Frequency in Reads") -> di.trim.len.mh.freq.sum.plot.p # inside frequency * number of read
     # plot(substitution.number.p)
     saveRDS(di.trim.len.mh.freq.sum.plot.table , file = file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Di_Frequency.table.rds")))
+    write.csv(di.trim.len.mh.freq.sum.plot.table, file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Di_Frequency.table.csv")))
     ggsave(file = file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Di_Frequency.png")), plot = di.trim.len.mh.freq.sum.plot.p, dpi = 300, width = 12, height = 6)  
     options(warn=0)
   }else{
@@ -2304,18 +2378,23 @@ SaveTsFreqPlot <- function(variants.count.total.list, save.dir, type = c("mut", 
       ,Frequency = numeric(ncol(freq.df) - 4)
     )
     saveRDS(total.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Intervening_Sequence_Frequency.table.rds")))
+    write.csv(total.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "a]Distribution_of_", type, "_MMEJ_Total_Intervening_Sequence_Frequency.table.csv")))
     mono.mh.sum.by.nucleotide.table <- data.frame(
       Nucleotide = factor(colnames(freq.df)[5:8], levels = colnames(freq.df)[5:8])
       ,Frequency = numeric(8 - 4)
     )
     saveRDS(mono.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Intervening_Sequence_Frequency.table.rds")))
+    write.csv(mono.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "b]Distribution_of_", type, "_MMEJ_Mono_Intervening_Sequence_Frequency.table.csv")))
     di.mh.sum.by.nucleotide.table <- data.frame(
       Nucleotide = factor(colnames(freq.df)[9:ncol(freq.df)], levels = colnames(freq.df)[9:ncol(freq.df)])
       ,Frequency = numeric(ncol(freq.df) - 8)
     )
     saveRDS(di.mh.sum.by.nucleotide.table , file = file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Intervening_Sequence_Frequency.table.rds")))
+    write.csv(di.mh.sum.by.nucleotide.table, file.path(save.dir, paste0(id.number, "c]Distribution_of_", type, "_MMEJ_Di_Intervening_Sequence_Frequency.table.csv")))
     saveRDS(data.frame() , file = file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Mono_Frequency.table.rds")))
+    write.csv(data.frame(), file.path(save.dir, paste0(id.number, "d]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Mono_Frequency.table.csv")))
     saveRDS(data.frame() , file = file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Di_Frequency.table.rds")))
+    write.csv(data.frame(), file.path(save.dir, paste0(id.number, "e]Distribution_of_", type, "_MMEJ_Intervening_Length_Intervening_Sequence_Di_Frequency.table.csv")))
   }
 }
 

@@ -14,6 +14,15 @@ If you want to know more detailed information and instruction, please check our 
 
 ### Version History
 
+###　[v1.9beta] - 
+
+##### added
+- all data that is used for plot is exported to the result in MaChIAto Aligner
+- the classification for frameshift variants is available in MaChIAto Aligner
+
+##### fixed
+- the most of plot data is exported as .csv format in MaChIAto Aligner
+
 ###　[v1.8beta] - 
 
 ##### added
@@ -21,6 +30,7 @@ If you want to know more detailed information and instruction, please check our 
 
 ##### fixed
 - table with a certain amplicon name can be recognized when CRSIRPEsso2 format is processed in MaChIAto Classifier.
+- some optimization parameters is calculated as float variables in MaChIAto Classifier.
 - result of correlation test can be put out in MaChIAto Analyzer.
 
 ##### changed

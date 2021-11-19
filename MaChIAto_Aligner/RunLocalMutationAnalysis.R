@@ -166,6 +166,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     xlab("Relative Position[bp]") +
     ylab("Number of insertion label")
     # plot(mutation.insertion.p)
+    write.csv(insertion.mutation.position.table, file.path(mutation.analysis.dir, "[ⅰa]edited_mutation.insertion.position.table.csv"))
     saveRDS(insertion.mutation.position.table, file = file.path(mutation.analysis.dir, "[ⅰa]edited_mutation.insertion.position.table.rds"))
     ggsave(file = file.path(mutation.analysis.dir, "[ⅰa]edited_mutation.insertion.position.png"), plot = mutation.insertion.p, dpi = 300, width = 12, height = 6)
   }
@@ -187,6 +188,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     xlab("Relative Position[bp]") +
     ylab("Number of deletion label")
     # plot(mutation.deletion.deletion.p)
+    write.csv(deletion.mutation.position.table, file.path(mutation.analysis.dir, "[ⅰb]edited_mutation.deletion.position.table.csv"))
     saveRDS(deletion.mutation.position.table, file = file.path(mutation.analysis.dir, "[ⅰb]edited_mutation.deletion.position.table.rds"))
     ggsave(file = file.path(mutation.analysis.dir, "[ⅰb]edited_mutation.deletion.position.png"), plot = mutation.deletion.deletion.p, dpi = 300, width = 12, height = 6)
   }
@@ -208,6 +210,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     xlab("Relative Position[bp]") +
     ylab("Number of no overlap deletion label")
     # plot(mutation.deletion.no.overlap.deletion.p)
+    write.csv(mutation.deletion.nooverlap.position.table, file.path(mutation.analysis.dir, "[ⅰc]edited_mutation.deletion.no.overlap.position.table.csv"))
     saveRDS(mutation.deletion.nooverlap.position.table, file = file.path(mutation.analysis.dir, "[ⅰc]edited_mutation.deletion.no.overlap.position.table.rds"))
     ggsave(file = file.path(mutation.analysis.dir, "[ⅰc]edited_mutation.deletion.no.overlap.position.png"), plot = mutation.deletion.no.overlap.deletion.p, dpi = 300, width = 12, height = 6)
   }
@@ -223,6 +226,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     xlab("Relative Position[bp]") +
     ylab("Number of substitution label")
     # plot(untreated.substitution.p)
+    write.csv(untreated.substitution.position.table, file.path(mutation.analysis.dir, "[ⅰd]untreated.substitution.position.table.csv"))
     saveRDS(untreated.substitution.position.table, file = file.path(mutation.analysis.dir, "[ⅰd]untreated.substitution.position.table.rds"))
     ggsave(file = file.path(mutation.analysis.dir, "[ⅰd]untreated.substitution.position.png"), plot = untreated.substitution.p, dpi = 300, width = 12, height = 6)
   }
@@ -238,6 +242,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     xlab("Relative Position[bp]") +
     ylab("Number of substitution label")
     # plot(mutation.substitution.p)
+    write.csv(mutation.substitution.position.table, file.path(mutation.analysis.dir, "[ⅰe]mutation.substitution.position.table.csv"))
     saveRDS(mutation.substitution.position.table, file = file.path(mutation.analysis.dir, "[ⅰe]mutation.substitution.position.table.rds"))
     ggsave(file = file.path(mutation.analysis.dir, "[ⅰe]mutation.substitution.position.png"), plot = mutation.substitution.p, dpi = 300, width = 12, height = 6)
   }
@@ -257,6 +262,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     xlab("Relative Position[bp]") +
     ylab("Number of substitution label")
     # plot(both.substitution.p)
+    write.csv(both.substitution.position.table, file.path(mutation.analysis.dir, "[ⅰf]both.substitution.position.table.csv"))
     saveRDS(both.substitution.position.table, file = file.path(mutation.analysis.dir, "[ⅰf]both.substitution.position.table.rds"))
     ggsave(file = file.path(mutation.analysis.dir, "[ⅰf]both.substitution.position.png"), plot = both.substitution.p, dpi = 300, width = 12, height = 6)
   }
@@ -289,12 +295,14 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
 
   # make mutation size plot
   if(!is.null(mutation.is.sn.list$total.is.sn.list$indels.size.table)){
+    write.csv(mutation.is.sn.list$total.is.sn.list$indels.size.table, file.path(mutation.analysis.dir, "[ⅱa]Distribution_of_indel_size_on_target_site.table.csv"))
     saveRDS(mutation.is.sn.list$total.is.sn.list$indels.size.table , file = file.path(mutation.analysis.dir, "[ⅱa]Distribution_of_indel_size_on_target_site.table.rds"))
     SaveIndelSizeReadBarPlot(mutation.is.sn.list$total.is.sn.list$indels.size.table, file.path(mutation.analysis.dir, "[ⅱa]Distribution_of_indel_size_on_target_site.png"))
   }
 
   # make substitution number plot
   if(!is.null(mutation.is.sn.list$total.is.sn.list$substitution.number.table)){
+    write.csv(mutation.is.sn.list$total.is.sn.list$substitution.number.table, file.path(mutation.analysis.dir, "[ⅱb]Distribution_of_substitution_number_on_target_site.table.csv"))
     saveRDS(mutation.is.sn.list$total.is.sn.list$substitution.number.table , file = file.path(mutation.analysis.dir, "[ⅱb]Distribution_of_substitution_number_on_target_site.table.rds"))
     SaveSubstitutionNumberReadBarPlot(mutation.is.sn.list$total.is.sn.list$substitution.number.table, file.path(mutation.analysis.dir, "[ⅱb]Distribution_of_substitution_number_on_target_site.png"))
   }
@@ -309,10 +317,12 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
 
   # Make deletion length-count plot
   if(!is.null(mutation.is.sn.list$mmej.is.sn.list$indels.size.table)){
+    write.csv(mutation.is.sn.list$mmej.is.sn.list$indels.size.table, file.path(mutation.analysis.dir, "[ⅵa]Distribution_of_MMEJ_indel_size_on_target_site.table.csv"))
     saveRDS(mutation.is.sn.list$mmej.is.sn.list$indels.size.table , file = file.path(mutation.analysis.dir, "[ⅵa]Distribution_of_MMEJ_indel_size_on_target_site.table.rds"))
     SaveIndelSizeReadBarPlot(mutation.is.sn.list$mmej.is.sn.list$indels.size.table, file.path(mutation.analysis.dir, "[ⅵa]Distribution_of_MMEJ_indel_size_on_target_site.png"))
   }
   if(!is.null(mutation.is.sn.list$nhej.is.sn.list$indels.size.table)){
+    write.csv(mutation.is.sn.list$nhej.is.sn.list$indels.size.table, file.path(mutation.analysis.dir, "[ⅵb]Distribution_of_NHEJ_indel_size_on_target_site.table.csv"))
     saveRDS(mutation.is.sn.list$nhej.is.sn.list$indels.size.table , file = file.path(mutation.analysis.dir, "[ⅵb]Distribution_of_NHEJ_indel_size_on_target_site.table.rds"))
     SaveIndelSizeReadBarPlot(mutation.is.sn.list$nhej.is.sn.list$indels.size.table, file.path(mutation.analysis.dir, "[ⅵb]Distribution_of_NHEJ_indel_size_on_target_site.png"))
   }
@@ -324,6 +334,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
 
   # Make microhomology length-count plot
   if(!is.null(mutation.mmej.mlc.tlc.list$mh.size.table)){
+    write.csv(mutation.mmej.mlc.tlc.list$mh.size.table, file.path(mutation.analysis.dir, "[ⅶa]Distribution_of_MMEJ_microhomology_length_on_target_site.table.csv"))
     saveRDS(mutation.mmej.mlc.tlc.list$mh.size.table , file = file.path(mutation.analysis.dir, "[ⅶa]Distribution_of_MMEJ_microhomology_length_on_target_site.table.rds"))
     SaveSeqLengthReadBarPlot(
       mutation.mmej.mlc.tlc.list$mh.size.table
@@ -332,6 +343,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     )
   }
   if(!is.null(mutation.nhej.mlc.tlc.list$mh.size.table)){
+    write.csv(mutation.nhej.mlc.tlc.list$mh.size.table, file.path(mutation.analysis.dir, "[ⅶb]Distribution_of_NHEJ_microhomology_length_on_target_site.table.csv"))
     saveRDS(mutation.nhej.mlc.tlc.list$mh.size.table , file = file.path(mutation.analysis.dir, "[ⅶb]Distribution_of_NHEJ_microhomology_length_on_target_site.table.rds"))
     SaveSeqLengthReadBarPlot(
       mutation.nhej.mlc.tlc.list$mh.size.table
@@ -342,6 +354,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
 
   # Make trimmed length-count plot
   if(!is.null(mutation.mmej.mlc.tlc.list$trim.size.table)){
+    write.csv(mutation.mmej.mlc.tlc.list$trim.size.table, file.path(mutation.analysis.dir, "[ⅷa]Distribution_of_MMEJ_Trimmed_Seq_length_on_target_site.table.csv"))
     saveRDS(mutation.mmej.mlc.tlc.list$trim.size.table , file = file.path(mutation.analysis.dir, "[ⅷa]Distribution_of_MMEJ_Trimmed_Seq_length_on_target_site.table.rds"))
     SaveSeqLengthReadBarPlot(
       mutation.mmej.mlc.tlc.list$trim.size.table
@@ -350,6 +363,7 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     )
   }
   if(!is.null(mutation.nhej.mlc.tlc.list$trim.size.table)){
+    write.csv(mutation.nhej.mlc.tlc.list$trim.size.table, file.path(mutation.analysis.dir, "[ⅷb]Distribution_of_NHEJ_Trimmed_Seq_length_on_target_site.table.csv"))
     saveRDS(mutation.nhej.mlc.tlc.list$trim.size.table , file = file.path(mutation.analysis.dir, "[ⅷb]Distribution_of_NHEJ_Trimmed_Seq_length_on_target_site.table.rds"))
     SaveSeqLengthReadBarPlot(
       mutation.nhej.mlc.tlc.list$trim.size.table

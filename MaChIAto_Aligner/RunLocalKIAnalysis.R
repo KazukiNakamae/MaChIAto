@@ -562,6 +562,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
   # Make trimmed length-count plot
   # left jucntion
   if(!is.null(left.imprecise.mmej.mlc.tlc.list$mh.size.table)){
+    write.csv(left.imprecise.mmej.mlc.tlc.list$mh.size.table, file.path(knock.in.analysis.dir, "[ⅴa]Distribution_of_MMEJ_microhomology_length_on_left_junction.table.csv"))
     saveRDS(left.imprecise.mmej.mlc.tlc.list$mh.size.table , file = file.path(knock.in.analysis.dir, "[ⅴa]Distribution_of_MMEJ_microhomology_length_on_left_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       left.imprecise.mmej.mlc.tlc.list$mh.size.table
@@ -570,6 +571,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
     )
   }
   if(!is.null(left.imprecise.nhej.mlc.tlc.list$mh.size.table)){
+    write.csv(left.imprecise.nhej.mlc.tlc.list$mh.size.table, file.path(knock.in.analysis.dir, "[ⅴb]Distribution_of_NHEJ_microhomology_length_on_left_junction.table.csv"))
     saveRDS(left.imprecise.nhej.mlc.tlc.list$mh.size.table , file = file.path(knock.in.analysis.dir, "[ⅴb]Distribution_of_NHEJ_microhomology_length_on_left_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       left.imprecise.nhej.mlc.tlc.list$mh.size.table
@@ -579,6 +581,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
   }
   # right jucntion
   if(!is.null(right.imprecise.mmej.mlc.tlc.list$mh.size.table)){
+    write.csv(right.imprecise.mmej.mlc.tlc.list$mh.size.table, file.path(knock.in.analysis.dir, "[ⅴa]Distribution_of_MMEJ_microhomology_length_on_right_junction.table.csv"))
     saveRDS(right.imprecise.mmej.mlc.tlc.list$mh.size.table , file = file.path(knock.in.analysis.dir, "[ⅴa]Distribution_of_MMEJ_microhomology_length_on_right_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       right.imprecise.mmej.mlc.tlc.list$mh.size.table
@@ -587,6 +590,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
     )
   }
   if(!is.null(right.imprecise.nhej.mlc.tlc.list$mh.size.table)){
+    write.csv(right.imprecise.nhej.mlc.tlc.list$mh.size.table, file.path(knock.in.analysis.dir, "[ⅴb]Distribution_of_NHEJ_microhomology_length_on_right_junction.table.csv"))
     saveRDS(right.imprecise.nhej.mlc.tlc.list$mh.size.table , file = file.path(knock.in.analysis.dir, "[ⅴb]Distribution_of_NHEJ_microhomology_length_on_right_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       right.imprecise.nhej.mlc.tlc.list$mh.size.table
@@ -598,6 +602,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
   # Make trimmed length-count plot
   # left jucntion
   if(!is.null(left.imprecise.mmej.mlc.tlc.list$trim.size.table)){
+    write.csv(left.imprecise.mmej.mlc.tlc.list$trim.size.table, file.path(knock.in.analysis.dir, "[ⅵa]Distribution_of_MMEJ_Trimmed_Seq_length_on_left_junction.table.csv"))
     saveRDS(left.imprecise.mmej.mlc.tlc.list$trim.size.table , file = file.path(knock.in.analysis.dir, "[ⅵa]Distribution_of_MMEJ_Trimmed_Seq_length_on_left_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       left.imprecise.mmej.mlc.tlc.list$trim.size.table
@@ -606,6 +611,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
     )
   }
   if(!is.null(left.imprecise.nhej.mlc.tlc.list$trim.size.table)){
+    write.csv(left.imprecise.nhej.mlc.tlc.list$trim.size.table, file.path(knock.in.analysis.dir, "[ⅵb]Distribution_of_NHEJ_Trimmed_Seq_length_on_left_junction.table.csv"))
     saveRDS(left.imprecise.nhej.mlc.tlc.list$trim.size.table , file = file.path(knock.in.analysis.dir, "[ⅵb]Distribution_of_NHEJ_Trimmed_Seq_length_on_left_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       left.imprecise.nhej.mlc.tlc.list$trim.size.table
@@ -615,6 +621,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
   }
   # right jucntion
   if(!is.null(right.imprecise.mmej.mlc.tlc.list$trim.size.table)){
+    write.csv(right.imprecise.mmej.mlc.tlc.list$trim.size.table, file.path(knock.in.analysis.dir, "[ⅵa]Distribution_of_MMEJ_Trimmed_Seq_length_on_right_junction.table.csv"))
     saveRDS(right.imprecise.mmej.mlc.tlc.list$trim.size.table , file = file.path(knock.in.analysis.dir, "[ⅵa]Distribution_of_MMEJ_Trimmed_Seq_length_on_right_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       right.imprecise.mmej.mlc.tlc.list$trim.size.table
@@ -623,6 +630,7 @@ RunLocalKIAnalysis <- function(bam.datatype.dir, result.datatype.dir, index.dir,
     )
   }
   if(!is.null(right.imprecise.nhej.mlc.tlc.list$trim.size.table)){
+    write.csv(right.imprecise.nhej.mlc.tlc.list$trim.size.table, file.path(knock.in.analysis.dir, "[ⅵb]Distribution_of_NHEJ_Trimmed_Seq_length_on_right_junction.table.csv"))
     saveRDS(right.imprecise.nhej.mlc.tlc.list$trim.size.table , file = file.path(knock.in.analysis.dir, "[ⅵb]Distribution_of_NHEJ_Trimmed_Seq_length_on_right_junction.table.rds"))
     SaveSeqLengthReadBarPlot(
       right.imprecise.nhej.mlc.tlc.list$trim.size.table

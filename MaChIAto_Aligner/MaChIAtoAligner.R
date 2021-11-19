@@ -8,11 +8,9 @@ debug.flag <- FALSE
 ### TODO
 ## reverse ki analysis
 # Left reverse ki alignment may be less sensitive than Right reverse ki alignment.
-# this cause is located in bam alignment setting. but the exact point remain unclear.
+# this cause is located in bam alignment setting. but, the exact point remains unclear.
 ############################################################################
 #-- Setting ----------------------------------------------------#
-
-# version 1.4
 
 message("
 .___  ___.      ___       ______  __    __   __       ___   .___________.  ______   
@@ -31,7 +29,7 @@ message("
                                                                       
 Author: Kazuki Nakamae at Sakuma Tetsushi and Takashi Yamamoto lab, Hiroshima Univ, Japan
 For support contact kazukinakamae@gmail.com
-version 1.4.beta
+version 1.5.beta
 ")
 
 help.message <- "
@@ -68,7 +66,7 @@ The outside sequence flanking 3'-homology arm of donor.
 
 # Get directory path
 if(debug.flag == TRUE){
-    script.dir <- "/Volumes/databank2/temp/MAChIAto/MaChIAto_Aligner"
+    script.dir <- "/Users/nedo01/nakamae_github/MaChIAto/MaChIAto_Aligner"
 }else{
     initial.options <- commandArgs(trailingOnly = FALSE)
     file.arg.name <- "--file="
@@ -113,10 +111,10 @@ message("----------------------------")
 left.extra.seq <- "" # default
 right.extra.seq <- "" # default
 if(debug.flag == TRUE){
-    input.fn <- "/Volumes/databank2/MaChIAto2_v1.7.0_output_200311/MaChIAto_from_CRISPResso2_at_20200311180758_on_AAVS1-C"
-    output.prefix <- "./MaChIAtoAlignerv14_output_200501_from_MaChIAto2_v1.7.0_output_200311/"
-    left.extra.seq <- "GTTTGG"
-    right.extra.seq <- "CCAAAC"
+    input.fn <- ""
+    output.prefix <- ""
+    left.extra.seq <- ""
+    right.extra.seq <- ""
 }else{
     if(length(commandArgs(trailingOnly=TRUE)) < 2){
       message(help.message)
@@ -414,7 +412,7 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     , Percentage=crispresso.count.sum / sum(crispresso.count.sum) * 100
   )
   
-  write.table(crispresso.class.count.table, file = file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_table.txt") # TODO : add ID number
+  write.table(crispresso.class.count.table, file = file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_table.csv") # TODO : add ID number
     , quote=FALSE, col.names=FALSE, row.names=FALSE, append=TRUE, sep = ",")
   saveRDS(crispresso.class.count.table, file = file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_table.rds"))
   SavePieChart(crispresso.class.count.table
@@ -429,7 +427,7 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     Position=factor(c("Before Alignment", "After Alignment"), levels = c("Before Alignment", "After Alignment"))
     , Frequency=c(crispresso.pre.bwa.read.sum, crispresso.bwa.read.sum)
   )
-  write.table(rbind(as.character(crispresso.bwa.read.sum.table$Position), crispresso.bwa.read.sum.table$Frequency), file = file.path(crispresso.rate.dir, "[i]The_amount_of_alignment_loss_with_CRISPResso-BWAMEM.txt")
+  write.table(rbind(as.character(crispresso.bwa.read.sum.table$Position), crispresso.bwa.read.sum.table$Frequency), file = file.path(crispresso.rate.dir, "[i]The_amount_of_alignment_loss_with_CRISPResso-BWAMEM.csv")
     , quote=FALSE, col.names=FALSE, row.names=FALSE, append=TRUE, sep = ",")
   saveRDS(crispresso.bwa.read.sum.table, file = file.path(crispresso.rate.dir, "[i]The_amount_of_alignment_loss_with_CRISPResso-BWAMEM.rds"))
   SaveCompBarPlot(crispresso.bwa.read.sum.table
@@ -455,7 +453,7 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     , Percentage=machiato.including.unclassified.class.count.sum / sum(machiato.including.unclassified.class.count.sum) * 100
   )
   
-  write.table(machiato.including.unclassified.class.count.table, file = file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table(including_Unclassified).txt")
+  write.table(machiato.including.unclassified.class.count.table, file = file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table(including_Unclassified).csv")
     , quote=FALSE, col.names=FALSE, row.names=FALSE,append=TRUE, sep = ",")
   saveRDS(machiato.including.unclassified.class.count.table, file = file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table(including_Unclassified).rds"))
   SavePieChart(machiato.including.unclassified.class.count.table
@@ -477,7 +475,7 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     , Percentage=machiato.class.count.sum / sum(machiato.class.count.sum) * 100
   )
   
-  write.table(machiato.class.count.table, file = file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table.txt")
+  write.table(machiato.class.count.table, file = file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table.csv")
     , quote=FALSE, col.names=FALSE, row.names=FALSE,append=TRUE, sep = ",")
   saveRDS(machiato.class.count.table, file = file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table.rds"))
   SavePieChart(machiato.class.count.table
@@ -492,7 +490,7 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     Position=factor(c("Before Alignment", "After Alignment"), levels = c("Before Alignment", "After Alignment"))
     , Frequency=c(machiato.pre.bwa.read.sum, machiato.bwa.read.sum)
   )
-  write.table(rbind(as.character(machiato.bwa.read.sum.table$Position), machiato.bwa.read.sum.table$Frequency), file = file.path(machiato.rate.dir, "[ii]The_amount_of_alignment_loss_with_MaChIAto-BWAMEM.txt")
+  write.table(rbind(as.character(machiato.bwa.read.sum.table$Position), machiato.bwa.read.sum.table$Frequency), file = file.path(machiato.rate.dir, "[ii]The_amount_of_alignment_loss_with_MaChIAto-BWAMEM.csv")
     , quote=FALSE, col.names=FALSE, row.names=FALSE, append=TRUE, sep = ",")
   saveRDS(machiato.bwa.read.sum.table, file = file.path(machiato.rate.dir, "[ii]The_amount_of_alignment_loss_with_MaChIAto-BWAMEM.rds"))
   SaveCompBarPlot(machiato.bwa.read.sum.table
@@ -523,5 +521,5 @@ for(data.type in c("Unmodified", "NHEJ", "Mixed", "HDR")){
   }
 }
 
-message("---All process is completed.---")
+message("---The process is completed.---")
 quit(save = "no")
