@@ -412,13 +412,12 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     , Percentage=crispresso.count.sum / sum(crispresso.count.sum) * 100
   )
   
-  write.table(crispresso.class.count.table, file = file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_table.csv") # TODO : add ID number
-    , quote=FALSE, col.names=FALSE, row.names=FALSE, append=TRUE, sep = ",")
   saveRDS(crispresso.class.count.table, file = file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_table.rds"))
   SavePieChart(crispresso.class.count.table
     , c("#D98F4E", "#A65437", "#F2CA52", "#F2E2CE")
     , "Reads"
     , file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_pie_chart.png")
+    , file.path(crispresso.rate.dir, "[ⅰ]CRISPResso_Unmodified_NHEJ_HDR_table.csv") # TODO : add ID number
   )
 
   crispresso.pre.bwa.read.sum <- sum(as.numeric(read.csv(file.path(input.fn, "MaChIAto_alignment_pie_chart.csv"), stringsAsFactors=FALSE)[2, ]))
@@ -453,13 +452,12 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     , Percentage=machiato.including.unclassified.class.count.sum / sum(machiato.including.unclassified.class.count.sum) * 100
   )
   
-  write.table(machiato.including.unclassified.class.count.table, file = file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table(including_Unclassified).csv")
-    , quote=FALSE, col.names=FALSE, row.names=FALSE,append=TRUE, sep = ",")
   saveRDS(machiato.including.unclassified.class.count.table, file = file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table(including_Unclassified).rds"))
   SavePieChart(machiato.including.unclassified.class.count.table
-  , c("#D98F4E",  "#A65437", "#F2CA52", "#ADD4D9", "#F2E2CE")
+  , c("#D98F4E",  "#A65437", "#F2CA52", "#F2E2CE", "#ADD4D9")
   , "Reads"
   , file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_pie_chart(including_Unclassified).png")
+  , file.path(machiato.rate.dir, "[ⅰ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table(including_Unclassified).csv")
   )
 
   message("---Make plot each rate of CRISPResso-MaChIAto data---")
@@ -475,13 +473,12 @@ if(!is.null(crispresso.all.crispr.set) && !is.null(machiato.all.crispr.set)){
     , Percentage=machiato.class.count.sum / sum(machiato.class.count.sum) * 100
   )
   
-  write.table(machiato.class.count.table, file = file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table.csv")
-    , quote=FALSE, col.names=FALSE, row.names=FALSE,append=TRUE, sep = ",")
   saveRDS(machiato.class.count.table, file = file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table.rds"))
   SavePieChart(machiato.class.count.table
   , c("#D98F4E", "#A65437", "#F2CA52", "#F2E2CE")
   , "Reads"
   , file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_pie_chart.png")
+  , file.path(machiato.rate.dir, "[ⅱ]CRISPResso-MaChIAto_Unmodified_NHEJ_HDR_table.csv")
   )
 
   machiato.pre.bwa.read.sum <- sum(as.numeric(read.csv(file.path(input.fn, "MaChIAto_alignment_pie_chart.csv"), stringsAsFactors=FALSE)[2, ]))

@@ -1322,12 +1322,13 @@ MakeAggregatedKiIsSnTableList <- function(is.sn.list, direction = c("correct", "
   )
 }
 
-SavePieChart <- function(class.count.table, color.vec, elements.name, file.name){
+SavePieChart <- function(class.count.table, color.vec, elements.name, file.name, table.file.name){
 
   if(sum(class.count.table$Frequency) < 1){
     return()
   }
 
+    class.count.table$Class <- factor(class.count.table$Class, levels = unique(class.count.table$Class))
     class.count.plot.table <- class.count.table %>%
     arrange(desc(Class)) %>%
     mutate(Lab1.ypos = cumsum(Percentage) - 0.5*Percentage)
@@ -1356,16 +1357,24 @@ SavePieChart <- function(class.count.table, color.vec, elements.name, file.name)
   #  }
   #}
   options(warn = -1)
+  # class.count.plot.table$Class <- factor(class.count.plot.table$Class, levels = unique(class.count.plot.table$Class))
+  class.count.plot.table["Color"] <- color.vec
   class.count.pie.chart <- ggplot(class.count.plot.table, aes(x="", y=Percentage, fill=Class))+
     geom_bar(width = 1, stat = "identity", color = "white") +
     coord_polar("y", start=0) +
-    scale_fill_manual(values=color.vec) +
+    scale_fill_manual(values=rev(color.vec)) +
     geom_text(aes(x = 1.30, y=Lab1.ypos, label = paste(round(Percentage, digits = 1), "%", sep = "")), color = "black",  size=5) + 
     geom_text(aes(x = 1.82, y=Lab2.ypos, label = paste(Class, "\n(", Frequency, "", elements.name, ")", sep = "")), color = "black",  size=5) + 
     coord_polar("y", start = pi * 3/2, direction = -1) +
     theme_void()
   # plot(class.count.pie.chart)
   ggsave(file = file.name, plot = class.count.pie.chart, dpi = 300, width = 10, height = 10)
+  # save table
+  # "appending column names to file" is no problem.
+  # print(class.count.plot.table)
+  # browser()
+  write.table(class.count.plot.table, file = table.file.name
+    , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
   options(warn = 0)
   message(paste("Save pie chart in ", file.name, sep=""))
 }
@@ -1383,15 +1392,12 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Frequency=aggregated.is.sn.table.list$aggregated.substitution.number.table$Frequency
       , Percentage=aggregated.is.sn.table.list$aggregated.substitution.number.table$Frequency / sum(aggregated.is.sn.table.list$aggregated.substitution.number.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number.rds", sep="")))
     SavePieChart(aggregated.indels.size.class.count.table
-      , c("#F0F0F2", "#D9BACB", "#D99ABC")
+      , c("#D99ABC", "#D9BACB", "#F0F0F2")
       , "Reads"
-      , file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number_piechart.png", sep="")))
+      , file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number_piechart.png", sep=""))
+      , file.path(outdir, paste("[ⅲa]Rate_of_", ki.type, "_substitution_number.csv", sep="")))
   }
   # only indels size pie chart
   if(!is.null(aggregated.is.sn.table.list$aggregated.indels.size.table) & sum(aggregated.is.sn.table.list$aggregated.indels.size.table$Frequency) > 0){
@@ -1401,15 +1407,12 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Frequency=aggregated.is.sn.table.list$aggregated.indels.size.table$Frequency
       , Percentage=aggregated.is.sn.table.list$aggregated.indels.size.table$Frequency / sum(aggregated.is.sn.table.list$aggregated.indels.size.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size.rds", sep="")))
     SavePieChart(aggregated.indels.size.class.count.table
-      , c("#F2ECD8", "#BF9E75", "#8C4A32", "#D9CC14", "#8C8304")
+      , c("#8C8304", "#D9CC14", "#8C4A32", "#BF9E75", "#F2ECD8")
       , "Reads"
-      , file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size_piechart.png", sep="")))
+      , file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size_piechart.png", sep=""))
+      , file.path(outdir, paste("[ⅲb]Rate_of_", ki.type, "_indel_size.csv", sep="")))
   }
 
   # substitution number + indels size pie chart
@@ -1422,15 +1425,12 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Frequency=aggregated.mutation.merge.size.number.table$Frequency
       , Percentage=aggregated.mutation.merge.size.number.table$Frequency / sum(aggregated.mutation.merge.size.number.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number.rds", sep="")))
     SavePieChart(aggregated.indels.size.class.count.table
-      , c("#F0F0F2", "#D9BACB", "#D99ABC", "#F2ECD8", "#BF9E75", "#8C4A32", "#D9CC14", "#8C8304")
+      , c("#8C8304", "#D9CC14", "#8C4A32", "#BF9E75", "#F2ECD8", "#D99ABC", "#D9BACB", "#F0F0F2")
       , "Reads"
-      , file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number_piechart.png", sep="")))
+      , file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number_piechart.png", sep=""))
+      , file.path(outdir, paste("[ⅲc]Rate_of_", ki.type, "_indel_size_and_substitution_number.csv", sep="")))
   }
 
   # substitution number + indels size pie chart without Unmodified
@@ -1443,15 +1443,12 @@ SaveIndelPlot <- function(is.sn.list, outdir, ki.type = c("mutation")){
       , Frequency=aggregated.mutation.merge.size.number.without.n.table$Frequency
       , Percentage=aggregated.mutation.merge.size.number.without.n.table$Frequency / sum(aggregated.mutation.merge.size.number.without.n.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).rds", sep="")))
     SavePieChart(aggregated.indels.size.class.count.table
-      , c("#D9BACB", "#D99ABC", "#F2ECD8", "#BF9E75", "#8C4A32", "#D9CC14", "#8C8304")
+      , c("#8C8304", "#D9CC14", "#8C4A32", "#BF9E75", "#F2ECD8", "#D99ABC", "#D9BACB")
       , "Reads"
       , file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).png", sep=""))
+      , file.path(outdir, paste("[ⅲd]Rate_of_", ki.type, "_indel_size_and_substitution_number(without Unmodified).csv", sep=""))
     )
   }
 }
@@ -1497,15 +1494,12 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Frequency=aggregated.correct.is.sn.table.list$aggregated.substitution.number.table$Frequency
       , Percentage=aggregated.correct.is.sn.table.list$aggregated.substitution.number.table$Frequency / sum(aggregated.correct.is.sn.table.list$aggregated.substitution.number.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.substitution.number.class.count.table, file = file.path(outdir, paste("[ⅱa]", ki.type, "_Rate_of_knock-in_substitution_number.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.substitution.number.class.count.table, file = file.path(outdir, paste("[ⅱa]", ki.type, "_Rate_of_knock-in_substitution_number.rds", sep="")))
     SavePieChart(aggregated.substitution.number.class.count.table
       , c("#F29F05", "#7F5124", "#BF7936")
       , "Reads"
-      , file.path(outdir, paste("[ⅱa]Rate_of_", ki.type, "_knock-in_substitution_number_piechart.png", sep="")))
+      , file.path(outdir, paste("[ⅱa]Rate_of_", ki.type, "_knock-in_substitution_number_piechart.png", sep=""))
+      , file.path(outdir, paste("[ⅱa]", ki.type, "_Rate_of_knock-in_substitution_number.csv", sep="")))
   }
   # only indels size pie chart (without precise knock-in)
   aggregated.mutation.merge.size.table <- rbind(aggregated.correct.is.sn.table.list$aggregated.indels.size.table, aggregated.reverse.is.sn.table.list$aggregated.indels.size.table)
@@ -1516,15 +1510,12 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Frequency=aggregated.mutation.merge.size.table$Frequency
       , Percentage=aggregated.mutation.merge.size.table$Frequency / sum(aggregated.mutation.merge.size.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅱb]", ki.type, "_Rate_of_knock-in_indel_size.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste("[ⅱb]", ki.type, "_Rate_of_knock-in_indel_size.rds", sep="")))
     SavePieChart(aggregated.indels.size.class.count.table
       , c("#C0D904", "#3E5902", "#618C03", "#95D904", "#F2EC9B", "#277A8C", "#60A6A6", "#B3D9C0")
       , "Reads"
-      , file.path(outdir, paste("[ⅱb]Rate_of_", ki.type, "_knock-in_indel_size_piechart.png", sep="")))
+      , file.path(outdir, paste("[ⅱb]Rate_of_", ki.type, "_knock-in_indel_size_piechart.png", sep=""))
+      , file.path(outdir, paste("[ⅱb]", ki.type, "_Rate_of_knock-in_indel_size.csv", sep="")))
   }
 
   # substitution number + indels size pie chart
@@ -1537,15 +1528,12 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Frequency=aggregated.mutation.merge.size.number.table$Frequency
       , Percentage=aggregated.mutation.merge.size.number.table$Frequency / sum(aggregated.mutation.merge.size.number.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.merge.size.number.class.count.table, file = file.path(outdir, paste("[ⅱc]", ki.type, "_Rate_of_knock-in_substitution_and_indels.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.merge.size.number.class.count.table, file = file.path(outdir, paste("[ⅱc]", ki.type, "_Rate_of_knock-in_substitution_and_indels.rds", sep="")))
     SavePieChart(aggregated.merge.size.number.class.count.table
       , c("#F29F05", "#7F5124", "#BF7936", "#C0D904", "#3E5902", "#618C03", "#95D904", "#F2EC9B", "#277A8C", "#60A6A6", "#B3D9C0")
       , "Reads"
-      , file.path(outdir, paste("[ⅱc]Rate_of_", ki.type, "_knock-in_substitution_and_indels_piechart.png", sep="")))
+      , file.path(outdir, paste("[ⅱc]Rate_of_", ki.type, "_knock-in_substitution_and_indels_piechart.png", sep=""))
+      , file.path(outdir, paste("[ⅱc]", ki.type, "_Rate_of_knock-in_substitution_and_indels.csv", sep="")))
   }
 
   # substitution number + indels size pie chart without precise knock-in
@@ -1558,15 +1546,12 @@ SaveKiIndelPlot <- function(correct.is.sn.list, reverse.is.sn.list, outdir, ki.t
       , Frequency=aggregated.mutation.merge.size.number.without.p_s0.table$Frequency
       , Percentage=aggregated.mutation.merge.size.number.without.p_s0.table$Frequency / sum(aggregated.mutation.merge.size.number.without.p_s0.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.merge.size.number.without.p_s0.class.count.table, file = file.path(outdir, paste("[ⅱd]", ki.type, "_Rate_of_knock-in_substitution_and_indels(without_precise_ki).csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.merge.size.number.without.p_s0.class.count.table, file = file.path(outdir, paste("[ⅱd]", ki.type, "_Rate_of_knock-in_substitution_and_indels(without_precise_ki).rds", sep="")))
     SavePieChart(aggregated.merge.size.number.without.p_s0.class.count.table
       , c("#7F5124", "#BF7936", "#C0D904", "#3E5902", "#618C03", "#95D904", "#F2EC9B", "#277A8C", "#60A6A6", "#B3D9C0")
       , "Reads"
       , file.path(outdir, paste("[ⅱd]Rate_of_", ki.type, "_knock-in_substitution_and_indels_piechart(without_precise_ki).png", sep=""))
+      , file = file.path(outdir, paste("[ⅱd]", ki.type, "_Rate_of_knock-in_substitution_and_indels(without_precise_ki).csv", sep=""))
     )
   }
 }
@@ -1614,15 +1599,12 @@ SaveInDelByTypePieChart <- function(aggregated.indels.size.table, ej.type, col.v
       , Frequency=aggregated.indels.size.table$Frequency
       , Percentage=aggregated.indels.size.table$Frequency / sum(aggregated.indels.size.table$Frequency) * 100
     )
-    options(warn=-1) # "appending column names to file" is no problem.
-    write.table(aggregated.indels.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size.csv", sep=""))
-      , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-    options(warn=0)
     saveRDS(aggregated.indels.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size.rds", sep="")))
     SavePieChart(aggregated.indels.size.class.count.table
       , col.vec
       , "Reads"
-      , file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size_piechart.png", sep="")))
+      , file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size_piechart.png", sep=""))
+      , file.path(outdir, paste(id.number, "]Rate_of_", ej.type, "_", type, "_indel_size.csv", sep="")))
   }
 }
 
@@ -1667,15 +1649,12 @@ SaveInDelBySizePieChart <- function(
           , Frequency=ej.type.by.size.table$Frequency
           , Percentage=ej.type.by.size.table$Frequency / sum(ej.type.by.size.table$Frequency) * 100
         )
-        options(warn=-1) # "appending column names to file" is no problem.
-        write.table(ej.type.by.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.csv", sep=""))
-          , quote=FALSE, col.names=TRUE, row.names=FALSE,append=TRUE, sep = ",")
-        options(warn=0)
         saveRDS(ej.type.by.size.class.count.table, file = file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.rds", sep="")))
         SavePieChart(ej.type.by.size.class.count.table
           , c("#ACF2F2", "#F2A0DC", "#D288F2", "#F2C9F0")
           , "Reads"
-          , file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.png", sep="")))
+          , file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.png", sep=""))
+          , file.path(outdir, paste(id.number, "]Rate_of_", size.label, "_", type, "_endjoining_type_piechart.csv", sep="")))
       }
     }
   }
@@ -1692,7 +1671,7 @@ SaveMutEjTypePlot = function(is.sn.list, outdir){
   insert.dominant.aggregated.is.sn.table.list <- MakeAggregatedIsSnTableList(is.sn.list$insert.dominant.is.sn.list)
   insert.dominant.aggregated.is.sn.table.list$aggregated.indels.size.table$label <- paste0("Insert_Dominant_", insert.dominant.aggregated.is.sn.table.list$aggregated.indels.size.table$label)
   # indels size pie chart by EJ type
-  size.label.col.vec <- c("#F2ECD8", "#BF9E75", "#8C4A32", "#D9CC14", "#8C8304", "#D99ABC")
+  size.label.col.vec <- c("#D99ABC", "#8C8304", "#D9CC14", "#8C4A32", "#BF9E75", "#F2ECD8")
   SaveInDelByTypePieChart(mmej.aggregated.is.sn.table.list$aggregated.indels.size.table, "MMEJ", size.label.col.vec, "mut", outdir)
   SaveInDelByTypePieChart(nhej.aggregated.is.sn.table.list$aggregated.indels.size.table, "NHEJ", size.label.col.vec, "mut", outdir)
   SaveInDelByTypePieChart(unidentified.deletion.aggregated.is.sn.table.list$aggregated.indels.size.table, "Unidentified_Deletion", size.label.col.vec, "mut", outdir)
@@ -1764,7 +1743,7 @@ SaveImKiEjTypePlot = function(null.precise.is.sn.list.set, imprecise.is.sn.list.
   unidentified.deletion.aggregated.im.ki.merge.size.table <- rbind(unidentified.deletion.aggregated.correct.is.sn.table.list$aggregated.indels.size.table, unidentified.deletion.aggregated.reverse.is.sn.table.list$aggregated.indels.size.table)
   insert.dominant.aggregated.im.ki.merge.size.table <- rbind(insert.dominant.aggregated.correct.is.sn.table.list$aggregated.indels.size.table, insert.dominant.aggregated.reverse.is.sn.table.list$aggregated.indels.size.table)
   # indels size pie chart by EJ type
-  size.label.col.vec <- c("#C0D904", "#277A8C", "#3E5902", "#60A6A6", "#618C03", "#95D904", "#F2EC9B", "#B3D9C0") # color order  
+  size.label.col.vec <- c("#B3D9C0", "#F2EC9B", "#95D904", "#618C03", "#60A6A6", "#3E5902", "#277A8C", "#C0D904") # color order  
   SaveInDelByTypePieChart(mmej.aggregated.im.ki.merge.size.table, "MMEJ", size.label.col.vec, ki.type, outdir)
   SaveInDelByTypePieChart(nhej.aggregated.im.ki.merge.size.table, "NHEJ", size.label.col.vec, ki.type, outdir)
   SaveInDelByTypePieChart(unidentified.deletion.aggregated.im.ki.merge.size.table, "Unidentified_Deletion", size.label.col.vec, ki.type, outdir)

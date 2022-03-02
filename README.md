@@ -17,6 +17,7 @@ If you want to know more detailed information and instruction, please check our 
 ###　[v1.9beta] - 
 
 ##### added
+- csv data for pie chart contains color code in MaChIAto Aligner
 - all data that is used for plot is exported to the result in MaChIAto Aligner
 - the classification for frameshift variants is available in MaChIAto Aligner
 
