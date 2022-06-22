@@ -14,6 +14,33 @@ If you want to know more detailed information and instruction, please check our 
 
 ### Version History
 
+###　[v1.0] - 
+
+Component Version
+MaChIAto: XXX
+MaChIAto Aligner: XXX
+collect_MaChIAto_data.py XXX
+MaChIAto Analyzer: XXX
+MaChIAto Reviewer: XXX
+
+##### added
+##### fixed
+##### changed
+
+###　Release!!!
+
+###　[v2.0beta] - 
+
+Component Version
+MaChIAto: 1.8.4
+MaChIAto Aligner: 1.6.beta
+collect_MaChIAto_data.py 3.00
+MaChIAto Analyzer: beta.1.7.4
+MaChIAto Reviewer: beta.2.6
+
+##### fixed
+- the number of variant shown in the wildtype alignment and barplot is limited in MaChIAto Aligner
+
 ###　[v1.9beta] - 
 
 ##### added
