@@ -13,6 +13,7 @@ MaChIAto would be helpful for people who want to
 - find the useful features for the efficiency prediction.
 
 We discribe the template command the the example in the [Online manual](https://machiatopage.github.io/).
+
 **Let's Check it!!!**
 https://machiatopage.github.io/
 
@@ -23,7 +24,7 @@ If you have a question and request, don't hesitate to contact me [Kazuki Nakamae
 
 Click "Download ZIP".
 
-![download_zip.png](https://github.com/KazukiNakamae/temp/blob/temp-images/download_zip.png)
+<img src="https://github.com/KazukiNakamae/temp/blob/temp-images/download_zip.png" alt="download_zip.png" title="download_zip.png" width="200" height="200">
 
 Alternatively, enter the following command terminal.
 
@@ -31,12 +32,12 @@ Alternatively, enter the following command terminal.
 git clone https://github.com/KazukiNakamae/MaChIAto.git;
 ```
 
-You can check the [Quick Start](https://machiatopage.github.io/2100/01/02/Quick-Start/#more)
+You can check the [Quick Start](https://machiatopage.github.io/2100/01/02/Quick-Start/#more).
 
 # Environment
 
 MaChIAto needs miniconda3, R (>version R-4.0.1), Xcode, and XQuartz.
-All program can run under the conda environment. The detailed setup procedure is [here](https://machiatopage.github.io/2100/01/01/Preparation/#more)]
+All program can run under the conda environment. The detailed setup procedure is [here](https://machiatopage.github.io/2100/01/01/Preparation/#more).
 
 **We are preparing the Docker container for MaChIAto. Please look forward to it**😁
 
