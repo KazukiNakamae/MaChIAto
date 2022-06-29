@@ -22,9 +22,7 @@ If you have a question and request, don't hesitate to contact me [Kazuki Nakamae
 
 # Download MaChIAto
 
-Click "Download ZIP".
-
-<img src="https://github.com/KazukiNakamae/temp/blob/temp-images/download_zip.png" alt="download_zip.png" title="download_zip.png" height="200">
+Click "[here](https://github.com/KazukiNakamae/MaChIAto/archive/refs/heads/master.zip)."
 
 Alternatively, enter the following command terminal.
 
@@ -121,6 +119,8 @@ The outside sequence flanking 3'-homology arm of the donor.
 
 
 # MaChIAto Analyzer
+
+You have to execute the collect_MaChIAto_data.py before using MaChIAto Analyzer.
 
 ## collect_MaChIAto_data.py
 
