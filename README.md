@@ -30,7 +30,7 @@ Alternatively, enter the following command terminal.
 git clone https://github.com/KazukiNakamae/MaChIAto.git;
 ```
 
-You can check the [Quick Start](https://machiatopage.github.io/2100/01/02/Quick-Start/#more).
+You can check the [Quick Start](https://machiatopage.github.io/2100/01/02/Quick-Start/#more) to start using MaChIAto.
 
 # Environment
 
