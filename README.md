@@ -24,7 +24,7 @@ If you have a question and request, don't hesitate to contact me [Kazuki Nakamae
 
 Click "Download ZIP".
 
-<img src="https://github.com/KazukiNakamae/temp/blob/temp-images/download_zip.png" alt="download_zip.png" title="download_zip.png" width="200" height="200">
+<img src="https://github.com/KazukiNakamae/temp/blob/temp-images/download_zip.png" alt="download_zip.png" title="download_zip.png" height="200">
 
 Alternatively, enter the following command terminal.
 
