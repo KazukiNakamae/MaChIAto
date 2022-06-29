@@ -22,7 +22,7 @@ If you have a question and request, don't hesitate to contact me [Kazuki Nakamae
 
 # Download MaChIAto
 
-Click "[here](https://github.com/KazukiNakamae/MaChIAto/archive/refs/heads/master.zip)."
+Click [HERE](https://github.com/KazukiNakamae/MaChIAto/archive/refs/heads/master.zip).
 
 Alternatively, enter the following command terminal.
 
@@ -35,7 +35,7 @@ You can check the [Quick Start](https://machiatopage.github.io/2100/01/02/Quick-
 # Environment
 
 MaChIAto needs miniconda3, R (>version R-4.0.1), Xcode, and XQuartz.
-All program can run under the conda environment. The detailed setup procedure is [here](https://machiatopage.github.io/2100/01/01/Preparation/#more).
+All program can run under the conda environment. The detailed setup procedure is [HERE](https://machiatopage.github.io/2100/01/01/Preparation/#more).
 
 **We are preparing the Docker container for MaChIAto. Please look forward to it**😁
 
