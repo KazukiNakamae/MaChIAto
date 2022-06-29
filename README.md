@@ -12,17 +12,14 @@ MaChIAto would be helpful for people who want to
 - analyze the sequence involved with InDels and imprecise editing.
 - find the useful features for the efficiency prediction.
 
-Online manual:
+We discribe the template command the the example in the [Online manual](https://machiatopage.github.io/).
+**Let's Check it!!!**
 https://machiatopage.github.io/
+
 
 If you have a question and request, don't hesitate to contact me [Kazuki Nakamae, Ph.D.](kazukinakamae@gmail.com).
 
-# Quick Start
-
-We demonstrate a simple example.
-Before that, you have to build the environment according to the section of Preparation.
-
-#### 1. Download MaChIAto
+# Download MaChIAto
 
 Click "Download ZIP".
 
@@ -34,211 +31,14 @@ Alternatively, enter the following command terminal.
 git clone https://github.com/KazukiNakamae/MaChIAto.git;
 ```
 
-#### 2. Open a terminal and go the directory.
+You can check the [Quick Start](https://machiatopage.github.io/2100/01/02/Quick-Start/#more)
 
-```bash
-cd (...)/MaChIAto
-```
+# Environment
 
-#### 3. Re-classify the allele frequency table derived from CRISPResso2.
+MaChIAto needs miniconda3, R (>version R-4.0.1), Xcode, and XQuartz.
+All program can run under the conda environment. The detailed setup procedure is [here](https://machiatopage.github.io/2100/01/01/Preparation/#more)]
 
-```bash
-source activate MaChIAto_env; # *You do not need to enter it again once you did it.
-```
-
-The re-classification command of MaChIAto (Classifier) 
-```bash
-python MaChIAto/MaChIAto.py \
--m CRISPResso2 \
--ccf (Alleles_frequency_table.zip of the CRISPResso2 output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence) \
-(other parameters);
-```
-
-```bash
-conda deactivate;
-```
-
-The other parameters varies per experiment type {knock-out, homology-based knokc-in, Prime Editing}.
-
-The example is for the knock-out analysis.
-
-##### Case of knock-out
-```bash
-python MaChIAto/MaChIAto.py \
--ccf (Alleles_frequency_table.zip of the CRISPResso2 output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence);
-```
-
-*The case of the knock-out and knock-in is shown in the section of MaChIAto (MaChIAto Classifier).
-
-#### 4. Check the classification result.
-
-You can get the classification result of the editing. The result is visualized as the pie chart based on the ALL_dataframe.txt.
-
-We provide the detailed description how to read them in the section of the MaChIAtoClassifier output.
-
-# Quick Start (Optional)
-
-MaChIAto can profile and visualize the MaChIAto output using MaChIAto Aligner, MaChIAto Analyzer, and MaChIAto Reviewer. 
-
-#### 5. Get local alignment and the mutation profiling using MaChIAto Aligner.
-
-```bash
-source activate MaChIAto_Aligner_env; # *You do not need to enter it again once you did it.
-```
-
-The alignment command of MaChIAto Aligner
-```bash
-Rscript MaChIAto_Aligner/MaChIAtoAligner.R \
-(directory of MaChIAto Classifier) \
-(output directory);
-```
-
-```bash
-conda deactivate;
-```
-
-If your donor insert has the extra sequence outside of the homology arm, you should enter it.
-Please refer to the section of MaChIAtoAligner.
-
-#### 6. Check the alignment result.
-
-You can get the local alignment of the editing. The result is visualized as the map.
-
-We provide a detailed description of how to read them in the section of the MaChIAtoAligner output.
-
-#### 7. Aggregate the multiple data.
-
-If you have multiple data (n>3) to profile the characteristics, you should aggregate it using the following command.
-
-```bash
-source activate MaChIAto_Analyzer_env; # *You do not need to enter it again once you did it.
-python MaChIAto_Analyzer/collect_MaChIAto_data.py \
--i (the prefix of MaChIAto Classifier output) \
--o (output directory) \
--ol (knock-out label) \
--t (calculation target) \
-```
-
-```bash
-conda deactivate;
-```
-
-It is used for the knock-out analysis. The calculation target for MaChIAto Analyzer/Reviewer is protospacer.
-You can target the homology arm and RT template using another command. Please see the section of MaChIAtoAnalyzer.
-
-#### 8. Investigate the relationship with (epi-)genomic context
-
-You can see the correlation with the >70 (epi-)genomic context using MaChIAto Analyzer.
-
-```bash
-Rscript MaChIAto_Analyzer/MaChIAtoAnalyzer.R \
-(directory of collect_MaChIAto_data.py) \
-(output directory);
-```
-
-```bash
-conda deactivate;
-```
-
-MaChIAtoAnalyzer basically use > 70 genomic context.
-If you want to use epigenomic context or other context, please see the section of MaChIAtoAnalyzer.
-
-#### 9. Check the correlation.
-
-You can get the correlation between the editing efficacy and the context. The result is visualized as the scatter plot.
-
-We provide a detailed description of how to read them in the section of the MaChIAtoAnalyzer output.
-
-#### 10. Profile the mutation tendency.
-
-
-```bash
-source activate MaChIAto_Reviewer_env; # *You do not need to enter it again once you did it.
-Rscript MaChIAto_Reviewer/MaChIAtoReviewer.R \
-(the prefix of MaChIAto Classifier output) \
-(the prefix of MaChIAto Aligner output) \
-(directory of collect_MaChIAto_data.py) \
-(output directory);
-```
-
-```bash
-conda deactivate;
-```
-
-#### 11. Check the mutation profile.
-
-You can get the mutation profile of the editing. The result is visualized as the bar plot and pie chart.
-
-We provide a detailed description of how to read them in the section of the MaChIAtoReviewer output.
-
-
-# Preparation
-
-### Change default shell
-
-#### 1. Set bash as default shell
-```bash
-chsh -s /bin/bash;
-```
-
-### Install software
-
-#### 1. install miniconda3 from Conda
-(https://docs.conda.io/en/latest/miniconda.html)
-#### 2. install R (>version R-4.0.1) from the CRAN
-(https://cran.ism.ac.jp)
-#### 3. install Xcode from the App Store
-(https://apps.apple.com/jp/app/xcode/id497799835?mt=12)
-```bash
-sudo xcodebuild -license;
-```
-#### 4. install XQuartz from the XQuartz project
-(xquartz.macosforge.org)
-
-### Build the environment using conda
-
-#### 1. Environment for MaChIAto_(MaChIAto Classifier)
-```bash
-conda create --name MaChIAto_env;
-source activate MaChIAto_env;
-conda install -c anaconda python=3.8;
-pip install --upgrade pip;
-pip install regex tqdm argparse biopython numpy matplotlib GPy gpyopt datetime pandas;
-conda deactivate;
-```
-
-#### 2. Environment for MaChIAtoAligner
-```bash
-conda create --name MaChIAto_Aligner_env;
-source activate MaChIAto_Aligner_env;
-conda install -c bioconda python=3.8 bwa=0.7.17 samtools=1.9;
-conda deactivate;
-```
-
-#### 3. Environment for MaChIAtoAnalyzer
-```bash
-conda create --name MaChIAto_Analyzer_env;
-source activate MaChIAto_Analyzer_env;
-conda install -c anaconda python=3.8 wget;
-conda install -c bioconda emboss;
-conda install -c bioconda oligoarrayaux;
-pip install --upgrade pip;
-pip install numpy regex tqdm pandas;
-conda deactivate;
-```
-
-#### 4. Environment for MaChIAtoReviewer
-```bash
-conda create -n MaChIAto_Reviewer_env --clone MaChIAto_Aligner_env;
-source activate MaChIAto_Reviewer_env;
-conda deactivate;
-```
+**We are preparing the Docker container for MaChIAto. Please look forward to it**😁
 
 # Usage
 
@@ -282,81 +82,6 @@ conda deactivate;
 
 **--provided_optimization_file** : This parameter allows for the specification of the “MaChIAto_optimized_param.csv” from the analyzed MaChIAto folder. When this parameter is used, --copy_optimization parameter is required.', (default: "./MaChIAto_optimized_param.csv") (optional)
 
-### Template command
-
-##### Case of knock-out
-```bash
-python MaChIAto/MaChIAto.py \
--m CRISPResso2 \
--ccf (Alleles_frequency_table.zip of the CRISPResso2 output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence) \
--n (sample name)-(label name);
-```
-
-##### Case of homology-based knock-in
-```bash
-python MaChIAto/MaChIAto.py \
--m CRISPResso2 \
--ccf (Alleles_frequency_table.zip of the CRISPResso2 output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence) \
--e (expected editing amplicon seqeunce) \
--d (donor insert sequence) \
--lh (length of 5\' homology arm) \
--rh (length of 3\' homology arm) \
--n (sample name)-(label name);
-```
-
-##### Case of Prime Editing (Substitution/Deletion editing)
-```bash
-python MaChIAto/MaChIAto.py \
--m CRISPResso2 \
--ccf (Alleles_frequency_table.zip of the CRISPResso2 output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence) \
--e (expected editing amplicon seqeunce) \
--lh (length of prime binding site) \
--rh (length of RT template) \
--cn (distance between two nick sites) \
---primeediting_analysis \
--n (sample name)-(label name);
-```
-
-##### Case of Prime Editing (Insertion editing)
-```bash
-python MaChIAto/MaChIAto.py \
--m CRISPResso2 \
--ccf (Alleles_frequency_table.zip of the CRISPResso2 output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence) \
--e (expected editing amplicon seqeunce) \
--d (donor insert sequence) \
--lh (length of prime binding site) \
--rh (length of RT template) \
--cn (distance between two nick sites) \
---primeediting_analysis \
--n (sample name)-(label name);
-```
-
-If you want to use the result of CRISPResso version1, the -ccf should be replased into -cf.
-Example for CRISPResso version1
-```bash
-python MaChIAto/MaChIAto.py \
--m CRISPResso \
--cf (Alleles_frequency_table.txt of the CRISPResso output) \
--o (output directory) \
--a (wt amplicon sequence) \
--g (protospaser sequence) \
--n (sample name)-(label name);
-```
-
-*The **sample name** and **label name** can be **arbitrary**. If you analyze the multiple experiment (e.g. knock-out and knock-in), the name should be different from others.
-
 
 # MaChIAtoClassifier output
 
@@ -392,17 +117,6 @@ The outside sequence flanking 5'-homology arm of the donor.
 Right extra sequence (optional):
 The outside sequence flanking 3'-homology arm of the donor. 
 
-### Template command
-
-```bash
-Rscript MaChIAto_Aligner/MaChIAtoAligner.R \
-(Input directory) \
-(Output prefix) \
-(Left extra sequence) \
-(Right extra sequence);
-```
-
-*when you use external storage for save output, the process can be too slow. We recommend that you use the tool in the local storage.
 
 
 # MaChIAto Analyzer
@@ -427,75 +141,6 @@ Rscript MaChIAto_Aligner/MaChIAtoAligner.R \
 
 **--ignore_list** {str}: The list of ignore target set contains target names which are not desired to analyze for some reasons. The data (e.g. DBF4B-A, DBF4B-B, DBF4B-C, DBF4B-D) including target name (e.g. DBF4B) shown in the list is skipped through the process of MaChIAto Analyzer. The format should be comma-separated like “TargetA, TargetB, …” “example_data” directory has “ignore_list.csv” as example. (default: "") (optional)
 
-### Template command
-
-##### Case of Double knock-in analysis (*ADVANCE: The analysis includes the comparison between two knock-in methods.)
-
-```bash
-python MaChIAto_Analyzer/collect_MaChIAto_data.py \
--i (the prefix of MaChIAto Classifier output) \
--o (output directory) \
--sc (scaffold sequence of sgRNA) \
--ul (untreated label) \
--ol (knock-out label) \
--il (knock-in label 1) (knock-in label 2) \
--t (calculation target) \
---ignore_list (list of samples ignored);
-```
-
-##### Case of Single knock-in analysis (*STANDARD)
-
-```bash
-python MaChIAto_Analyzer/collect_MaChIAto_data.py \
--i (the prefix of MaChIAto Classifier output) \
--o (output directory) \
--sc (scaffold sequence of sgRNA) \
--ul (untreated label) \
--ol (knock-out label) \
--il (knock-in label) \
--t (calculation target) \
---ignore_list (list of samples ignored);
-```
-
-##### Case of Simple knock-in analysis (*SIMPLE: The analysis can be applied when there is no knock-out sample used as control.)
-
-```bash
-python MaChIAto_Analyzer/collect_MaChIAto_data.py \
--i (the prefix of MaChIAto Classifier output) \
--o (output directory) \
--sc (scaffold sequence of sgRNA) \
--il (knock-in label) \
--t (calculation target) \
---ignore_list (list of samples ignored);
-```
-
-##### Case of Double knock-out analysis (*ADVANCE: The analysis includes the comparison between two knock-out methods.)
-
-```bash
-python MaChIAto_Analyzer/collect_MaChIAto_data.py \
--i (the prefix of MaChIAto Classifier output) \
--o (output directory) \
--sc (scaffold sequence of sgRNA) \
--ul (untreated label) \
--ol (knock-out label 1) (knock-out label 2) \
--t (calculation target) \
---ignore_list (list of samples ignored);
-```
-
-##### Case of Single knock-out analysis (*STANDARD)
-
-```bash
-python MaChIAto_Analyzer/collect_MaChIAto_data.py \
--i (the prefix of MaChIAto Classifier output) \
--o (output directory) \
--sc (scaffold sequence of sgRNA) \
--ul (untreated label) \
--ol (knock-out label) \
--t (calculation target) \
---ignore_list (list of samples ignored);
-```
-
-*If you do not enter "-ul (untreated label)", the process can work. However, some filtering process will be skipped.
 
 
 ## MaChIAto Analyzer
@@ -514,15 +159,6 @@ The name of the feature group that the next argument includes.
 Table of extra data (optional):
 The pathname of extra data added by the user. The data should be a .csv file.
 
-### Template command
-
-```bash
-Rscript MaChIAto_Analyzer/MaChIAtoAnalyzer.R \
-(Summary directory) \
-(Output prefix) \
-(Name of extra data) \
-(Table of extra data);
-```
 
 
 # MaChIAto Reviewer
@@ -535,9 +171,8 @@ The summary directory generated with “collect_MaChIAto_data.py”.
 Output prefix:
 The directory into which the output directory is saved.
 
-### Template command
 
-Rscript MaChIAto_Reviewer/MaChIAtoReviewer.R \
-(Summary directory) \
-(Output prefix);
 
+# LICENCE
+
+MaChIAto is released under the MIT Licence. You can use our software for any purpose (including commercial use). Please enjoy MaChIAto!!!
