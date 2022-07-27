@@ -3,15 +3,26 @@
 ###　[v1.0] - 
 
 Component Version
-MaChIAto: XXX
-MaChIAto Aligner: XXX
-collect_MaChIAto_data.py XXX
-MaChIAto Analyzer: XXX
-MaChIAto Reviewer: XXX
+MaChIAto: 1.8.4
+MaChIAto Aligner: 1.0
+collect_MaChIAto_data.py 3.01
+MaChIAto Analyzer: 1.0
+MaChIAto Reviewer: 1.0
 
 ##### added
+add Dockerfile
+add filter to process samples listed in the label_sample_type.csv in MaChIAtoReviewer.R
+add trf409.linux64 to calculate the Repeat feature in Linux in CalcThermo-class.R
+
 ##### fixed
+Remove em space in MaChIAtoReviewerFunctions.R
+add snv.range in RunLocalMutationAnalysis.R
+collect_MaChIAto_data.py makes output directory if it does not exist
+deprecated expression of ggplot is changed in MaChIAtoReviewerFunctions.R
+The detection of LSL was not correct and fixed in CalcThermo-class.R
+
 ##### changed
+ggpubr is removed because it is not used in MaChIAto Analyzer
 
 ###　Release!!!
 

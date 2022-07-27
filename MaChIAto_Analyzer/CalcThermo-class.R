@@ -424,7 +424,11 @@ CalcThermo <- R6Class(
         # Error handling
         private$checkMode(seq, "seq", "character")
         # command <- paste0('echo ', seq , ' | ', file.path(self$script.dir, "bin/hybrid-ss-min"), ' -n', ' DNA', ' --stream') # <= version beta.1.7.2
-        command <- paste0('echo ', seq , ' | ', "hybrid-ss-min", ' -n', ' DNA', ' --stream') # new #  > version beta.1.7.2
+        if(Sys.info()["sysname"] == "Linux"){
+          command <- paste0('echo ', seq , ' | ', "/oligoarrayaux-3.8/src/hybrid-ss-min", ' -n', ' DNA', ' --stream') # new #  > version beta.1.7.2
+        }else{
+          command <- paste0('echo ', seq , ' | ', "hybrid-ss-min", ' -n', ' DNA', ' --stream') # new #  > version beta.1.7.2
+        }
         MEF <- as.numeric(system(command, intern = T))
 
         return(MEF)
@@ -474,8 +478,8 @@ CalcThermo <- R6Class(
           } else { #no palindrome
             len.vec <- c(len.vec, 0)
           }
+          LSL <- max(len.vec)
         }
-        LSL <- max(len.vec)
 
         return(LSL)
       }
@@ -500,7 +504,7 @@ CalcThermo <- R6Class(
         # Error handling
         private$checkMode(seq, "seq", "character")
 
-        temp.dir <- file.path(self$script.dir, "temp")
+        temp.dir <- file.path(self$script.dir, "CalcRepeat_temp")
         system(paste("mkdir", temp.dir, sep = " "))
         #make .fasta file
         write.fasta(seq
@@ -510,9 +514,15 @@ CalcThermo <- R6Class(
                     , nbchar = 60
                     , as.string = FALSE)
         #find copy number of a repetitive sequence
-        res = system(paste(file.path(self$script.dir, "trf409")
+        if(Sys.info()["sysname"] == "Linux"){
+          res = system(paste(file.path(self$script.dir, "trf409.linux64")
           , file.path(temp.dir, "seq.fa")
           , "2", "5", "7", "80", "10", "0", "2000", "-ngs", "-h", sep = " "), intern = TRUE)
+        }else{
+          res = system(paste(file.path(self$script.dir, "trf409")
+          , file.path(temp.dir, "seq.fa")
+          , "2", "5", "7", "80", "10", "0", "2000", "-ngs", "-h", sep = " "), intern = TRUE)
+        }
         system(paste("rm", "-r", temp.dir, sep = " ")) # clean
         mostcn <- 0
         if(length(res) >= 2){ # repeat seq > 1

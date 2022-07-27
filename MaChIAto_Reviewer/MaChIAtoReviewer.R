@@ -22,7 +22,7 @@ message("
 888   T88b \"Y8888   Y88P  888 \"Y8888  \"Y8888888P\"  \"Y8888 888     
                                                                   
                                                                       
-version beta.2.6
+version 1.0
 ")
 
 help.message <- "
@@ -351,7 +351,8 @@ if((analysis.mode == 1) | (analysis.mode == 4)){
 remove.target.vec <- unique(remove.target.vec)
 message("Remove...")
 print(remove.target.vec)
-fltr.res.file.df <- filter(res.file.df, !(sample.target %in% remove.target.vec))
+fltr.temp.res.file.df <- filter(res.file.df, (sample.label %in% label.table$label))
+fltr.res.file.df <- filter(fltr.temp.res.file.df, !(sample.target %in% remove.target.vec))
 message("Filtering is done.")
 
 ################################################################################################################################
@@ -633,7 +634,9 @@ consistency.mat <- apply(fltr.res.file.df, MARGIN = 1, function(row){
 })
 fltred.consistency.mat <- tidyr::replace_na(consistency.mat, 100)
 rownames(fltred.consistency.mat) <- c("Unmodified", "InDel", "Imprecise knock-in", "Precise knock-in")
-colnames(fltred.consistency.mat) <- fltr.res.file.df$sample.name[complete.cases(t(fltred.consistency.mat))]
+# Is it not needed?
+# colnames(fltred.consistency.mat) <- fltr.res.file.df$sample.name[complete.cases(t(fltred.consistency.mat))]
+colnames(fltred.consistency.mat) <- fltr.res.file.df$sample.name
 SaveTable(fltred.consistency.mat, file.path(comparison.analysis.dir, "[f]Boxplot_of_Rate_of_Consistency"))
 
 melt.consistency.df <- melt(fltred.consistency.mat)
@@ -819,14 +822,29 @@ machiato.group.table <- apply(machiato.rank.table, MARGIN = 2, function(col){
 SaveTable(machiato.group.table, file.path(comparison.analysis.dir, "[l3]Summary_of_Group_of_Class_on_MaChIAto"))
 
 # condition1
-MakeBumpChart(machiato.rank.table,
-  machiato.group.table,
-  condition1.focus.variable,
-  c("condition1.imprecise.knockin", "condition1.precise.knockin", "condition1.indel"),
-  file.path(comparison.analysis.dir, "[l4]Relation_of_Rank_of_Class_on_MaChIAto_in_condition1.png")
-)
+if(analysis.mode %in% c(1, 2, 3)){
+  MakeBumpChart(machiato.rank.table,
+    machiato.group.table,
+    condition1.focus.variable,
+    c("condition1.imprecise.knockin", "condition1.precise.knockin", "condition1.indel"),
+    file.path(comparison.analysis.dir, "[l4]Relation_of_Rank_of_Class_on_MaChIAto_in_condition1.png")
+  )
+}else{
+  message("[l4]Relation_of_Rank_of_Class_on_MaChIAto_in_condition1.png is skipped")
+}
 
-if(analysis.mode %in% c(1, 4)){
+if(analysis.mode %in% c(1)){
+  max.imprecise.indel.unmodified <- max(cbind(machiato.rate.table[,c("condition1.imprecise.knockin", "condition2.imprecise.knockin")],
+    machiato.rate.table[,c("condition1.indel", "condition2.indel")],
+    machiato.rate.table[,c("condition1.unmodified", "condition2.unmodified")])
+  )
+}else if(analysis.mode %in% c(4)){
+  max.imprecise.indel.unmodified <- max(cbind(machiato.rate.table[,c("condition1.indel", "condition2.indel")],
+    machiato.rate.table[,c("condition1.unmodified", "condition2.unmodified")])
+  )
+}
+
+if(analysis.mode %in% c(1)){
   # condition2
 
   MakeBumpChart(machiato.rank.table,
@@ -852,17 +870,20 @@ if(analysis.mode %in% c(1, 4)){
     file.path(comparison.analysis.dir, "[l7]Barplot_of_Rate_of_Precise_knock-in.png")
   )
 
-  max.imprecise.indel.unmodified <- max(cbind(machiato.rate.table[,c("condition1.imprecise.knockin", "condition2.imprecise.knockin")],
-    machiato.rate.table[,c("condition1.indel", "condition2.indel")],
-    machiato.rate.table[,c("condition1.unmodified", "condition2.unmodified")])
-  )
-
   MakePercentageBoxPlot(
     machiato.rate.table[,c("condition1.imprecise.knockin", "condition2.imprecise.knockin")],
     c("#A60321", "#A60321"),
     c(0, round(max.imprecise.indel.unmodified + 1, digits = 0)),
     file.path(comparison.analysis.dir, "[l8]Barplot_of_Rate_of_Imprecise_knock-in.png")
   )
+}else{
+  message("[l5]Relation_of_Rank_of_Class_on_MaChIAto_in_condition2.png is skipped")
+  message("[l6]Relation_of_Rank_of_Enhancement_on_MaChIAto.png is skipped")
+  message("[l7]Barplot_of_Rate_of_Precise_knock-in.png is skipped")
+  message("[l8]Barplot_of_Rate_of_Imprecise_knock-in.png is skipped")
+}
+
+if(analysis.mode %in% c(1, 4)){
 
   MakePercentageBoxPlot(
     machiato.rate.table[,c("condition1.indel", "condition2.indel")],
@@ -877,27 +898,34 @@ if(analysis.mode %in% c(1, 4)){
     c(0, round(max.imprecise.indel.unmodified + 1, digits = 0)),
     file.path(comparison.analysis.dir, "[l10]Barplot_of_Rate_of_Unmodified.png")
   )
+}else{
+  message("[l9]Barplot_of_Rate_of_InDel.png is skipped")
+  message("[l10]Barplot_of_Rate_of_Unmodified.png is skipped")
+}
 
-  if(analysis.mode %in% c(1)){
-    MakeFoldBoxPlot(
-      machiato.rate.table[,c("enhancement.1.2.precise.knockin", "reduction.1.2.imprecise.knockin", "reduction.1.2.indel", "reduction.1.2.unmodified")],
-      c("#FF540D", "#FF0DFF", "#FF0DFF", "#FF0DFF"),
-      c(FALSE, TRUE, TRUE, TRUE),
-      c(round(min(-log2(machiato.rate.table[,c("enhancement.1.2.precise.knockin", "reduction.1.2.imprecise.knockin", "reduction.1.2.indel", "reduction.1.2.unmodified")])) - 0.5, digits = 0),
-        round(max(log2(machiato.rate.table[,c("enhancement.1.2.precise.knockin", "reduction.1.2.imprecise.knockin", "reduction.1.2.indel", "reduction.1.2.unmodified")])) + 0.5, digits = 0)),
-      file.path(comparison.analysis.dir, "[l11]Barplot_of_Enhancement_Reduction.png")
-    )
-  }else{
-    MakeFoldBoxPlot(
-      machiato.rate.table[,c("reduction.1.2.indel", "reduction.1.2.unmodified")],
-      c("#FF0DFF", "#FF0DFF"),
-      c(TRUE, TRUE),
-      c(round(min(-log2(machiato.rate.table[,c("reduction.1.2.indel", "reduction.1.2.unmodified")])) - 0.5, digits = 0),
-        round(max(log2(machiato.rate.table[,c("reduction.1.2.indel", "reduction.1.2.unmodified")])) + 0.5, digits = 0)),
-      file.path(comparison.analysis.dir, "[l11]Barplot_of_Enhancement_Reduction.png")
-    )
-  }
+if(analysis.mode %in% c(1)){
+  MakeFoldBoxPlot(
+    machiato.rate.table[,c("enhancement.1.2.precise.knockin", "reduction.1.2.imprecise.knockin", "reduction.1.2.indel", "reduction.1.2.unmodified")],
+    c("#FF540D", "#FF0DFF", "#FF0DFF", "#FF0DFF"),
+    c(FALSE, TRUE, TRUE, TRUE),
+    c(round(min(-log2(machiato.rate.table[,c("enhancement.1.2.precise.knockin", "reduction.1.2.imprecise.knockin", "reduction.1.2.indel", "reduction.1.2.unmodified")])) - 0.5, digits = 0),
+      round(max(log2(machiato.rate.table[,c("enhancement.1.2.precise.knockin", "reduction.1.2.imprecise.knockin", "reduction.1.2.indel", "reduction.1.2.unmodified")])) + 0.5, digits = 0)),
+    file.path(comparison.analysis.dir, "[l11]Barplot_of_Enhancement_Reduction.png")
+  )
+}else if(analysis.mode %in% c(4)){
+  MakeFoldBoxPlot(
+    machiato.rate.table[,c("reduction.1.2.indel", "reduction.1.2.unmodified")],
+    c("#FF0DFF", "#FF0DFF"),
+    c(TRUE, TRUE),
+    c(round(min(-log2(machiato.rate.table[,c("reduction.1.2.indel", "reduction.1.2.unmodified")])) - 0.5, digits = 0),
+      round(max(log2(machiato.rate.table[,c("reduction.1.2.indel", "reduction.1.2.unmodified")])) + 0.5, digits = 0)),
+    file.path(comparison.analysis.dir, "[l11]Barplot_of_Enhancement_Reduction.png")
+  )
+}else{
+  message("[l11]Barplot_of_Enhancement_Reduction.png is skipped")
+}
 
+if(analysis.mode %in% c(1)){
   # T-test on precise knock-in
   MakePairedStaticalProfile(
     machiato.rate.table$condition1.precise.knockin,
@@ -911,7 +939,12 @@ if(analysis.mode %in% c(1, 4)){
     machiato.rate.table$condition2.imprecise.knockin,
     file.path(comparison.analysis.dir, "[l13]Paired_t-test_on_imprecise_knock-in.txt")
   )
+}else{
+  message("[l12]Paired_t-test_on_precise_knock-in.txt is skipped")
+  message("[l13]Paired_t-test_on_imprecise_knock-in.txt is skipped")
+}
 
+if(analysis.mode %in% c(1, 4)){
   # T-test on indel
   MakePairedStaticalProfile(
     machiato.rate.table$condition1.indel,
@@ -925,6 +958,9 @@ if(analysis.mode %in% c(1, 4)){
     machiato.rate.table$condition2.unmodified,
     file.path(comparison.analysis.dir, "[l15]Paired_t-test_on_unmodified.txt")
   )
+}else{
+  message("[l14]Paired_t-test_on_indel.txt is skipped")
+  message("[l15]Paired_t-test_on_unmodified.txt is skipped")
 }
 
 ################################################################################################################################

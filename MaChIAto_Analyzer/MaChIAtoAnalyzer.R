@@ -7,7 +7,7 @@ message("
 | | |,---||    |   |||   ||    |   ||   ||   |,---||    |   | .-' |---'|    
 ` ' '`---^`---'`   '``   '`---'`---'`   '`   '`---^`---'`---|'---'`---'`    
                                                         `---'               
-version beta.1.7.4
+version 1.0
 ")
 
 help.message <- "
@@ -66,7 +66,7 @@ library(dplyr)
 library(reshape2)
 library(maptools)
 library(scales)
-library(ggpubr)
+# library(ggpubr)
 
 ignore.list.fn <- character(0)
 if(debug.flag){

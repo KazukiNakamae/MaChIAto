@@ -43,7 +43,8 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
     , wt.seq
     , protospacer.seq
     , file.path(bam.muttype.dir, "untreated.bam")
-    , "untreated")
+    , "untreated"
+    , 35)
     if(!is.null(untreated.crispr.set))SaveVariantsData(untreated.crispr.set, untreated.dir, range.vec = -35:35, mut.type = "mut")
   }else{
     untreated.crispr.set <- readRDS(file.path(untreated.dir, "crispr.set.rds"))
@@ -57,7 +58,8 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
       , wt.seq
       , protospacer.seq
       , file.path(bam.muttype.dir, "overall_edited_deletion.bam")
-      , "overall_edited_deletion")
+      , "overall_edited_deletion"
+      , 35)
     if(!is.null(overall_edited_deletion.crispr.set))SaveVariantsData(overall_edited_deletion.crispr.set, deletion.dir, range.vec = -35:35, mut.type = "mut")
   }else{
     overall_edited_deletion.crispr.set <- readRDS(file.path(deletion.dir, "crispr.set.rds"))
@@ -71,7 +73,8 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
       , wt.seq
       , protospacer.seq
       , file.path(bam.muttype.dir, "overall_edited_substitution.bam")
-      , "overall_edited_substitution")
+      , "overall_edited_substitution"
+      , 35)
     if(!is.null(overall_edited_substitution.crispr.set))SaveVariantsData(overall_edited_substitution.crispr.set, substitution.dir, range.vec = -35:35, mut.type = "mut")
   }else{
     overall_edited_substitution.crispr.set <- readRDS(file.path(substitution.dir, "crispr.set.rds"))
@@ -85,7 +88,8 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
       , wt.seq
       , protospacer.seq
       , file.path(bam.muttype.dir, "overall_edited_insertion.bam")
-      , "overall_edited_insertion")
+      , "overall_edited_insertion"
+      , 35)
     if(!is.null(overall_edited_insertion.crispr.set))SaveVariantsData(overall_edited_insertion.crispr.set, insertion.dir, range.vec = -35:35, mut.type = "mut")
   }else{
     overall_edited_insertion.crispr.set <- readRDS(file.path(insertion.dir, "crispr.set.rds"))
@@ -99,7 +103,8 @@ RunLocalMutationAnalysis <- function(bam.datatype.dir, result.datatype.dir, inde
       , wt.seq
       , protospacer.seq
       , file.path(bam.muttype.dir, "unexpected_mutations.bam")
-      , "unexpected_mutations")
+      , "unexpected_mutations"
+      , 35)
     if(!is.null(unexpected_mutations.crispr.set))SaveVariantsData(unexpected_mutations.crispr.set, unexpected_mutations.dir, range.vec = -35:35, mut.type = "mut")
   }else{
     unexpected_mutations.crispr.set <- readRDS(file.path(unexpected_mutations.dir, "crispr.set.rds"))

@@ -688,7 +688,7 @@ RunRateSumTableTest <- function(res.file.df, table.data.path, focus.sample.name.
     t.test.res.vec <- character(0)
     for(colind in 1:ncol(focus.sample.df.1)){
       # Check the number of data
-      if((length(focus.sample.df.1[,colind]) < 3) |　(length(focus.sample.df.2[,colind]) < 3)){
+      if((length(focus.sample.df.1[,colind]) < 3) | (length(focus.sample.df.2[,colind]) < 3)){
         return(NULL)
       }
 
@@ -913,7 +913,9 @@ SaveBarGroupPlot <- function(count.merge.table, file.name, xlab, ylab, group.nam
     ) +
   xlab(xlab) +
   ylab(ylab) +
-  guides(fill=FALSE) +
+  # guides(fill=FALSE) +
+  # `guides(<scale> = FALSE)` is deprecated. Please use `guides(<scale> = "none")` instead. 
+  guides(fill="none") +
   labs(color = group.name)
   options(warn = -1)
   colnames.count.merge.table <- as.numeric(colnames(count.merge.table))

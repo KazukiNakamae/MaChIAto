@@ -4,14 +4,13 @@
 # @TODO: 全く同一の標的とサンプルラベルをもつものは平均を算出して、一つの列にまとめる
 
 __author__ = "Kazuki Nakamae <kazkinakamae@gmail.com>"
-__version__ = "3.00"
+__version__ = "3.01"
 __date__ = "4 March 2019"
 
 import argparse
 import sys
-from os import listdir
-from os.path import join
-from os.path import abspath
+from os import listdir, makedirs
+from os.path import join, abspath, isdir
 import subprocess
 import regex as re
 from tqdm import tqdm
@@ -76,6 +75,8 @@ def main():
 
         # set input/output directory path
         OUTPUT_DIRECTORY = abspath(args.outdir)
+        if not isdir(OUTPUT_DIRECTORY):
+            makedirs(OUTPUT_DIRECTORY)
         INPUT_DIRECTORY = abspath(args.indir)
         indir_list = [filename for filename in listdir(INPUT_DIRECTORY) if not filename.startswith('.')]
         if args.ignore_list != "":

@@ -29,7 +29,7 @@ message("
                                                                       
 Author: Kazuki Nakamae at Sakuma Tetsushi and Takashi Yamamoto lab, Hiroshima Univ, Japan
 For support contact kazukinakamae@gmail.com
-version 1.6.beta
+version 1.0
 ")
 
 help.message <- "
