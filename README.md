@@ -50,12 +50,12 @@ docker run --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/machiato_reviewer:lates
 
 Then, if you wish, you can follow the manual below.
 
-Quick Start: https://machiatopage.github.io/2100/01/02/Quick-Start/
-Usage of MaChIAto Classifier: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Classifier/
-Usage of MaChIAto Aligner: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Aligner/
-Usage of collect_MaChIAto_data.py: https://machiatopage.github.io/2022/07/27/Usage-of-collect-MaChIAto-data-py/
-Usage of MaChIAto Analyzer: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Analyzer/
-Usage of MaChIAto Reviewer: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Reviewer/
+- Quick Start: https://machiatopage.github.io/2100/01/02/Quick-Start/
+- Usage of MaChIAto Classifier: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Classifier/
+- Usage of MaChIAto Aligner: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Aligner/
+- Usage of collect_MaChIAto_data.py: https://machiatopage.github.io/2022/07/27/Usage-of-collect-MaChIAto-data-py/
+- Usage of MaChIAto Analyzer: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Analyzer/
+- Usage of MaChIAto Reviewer: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Reviewer/
 
 ## Install MaChIAto within the conda environment (Deprecated)
 
