@@ -17,7 +17,10 @@ We discribe the template command the the example in the [Online manual](https://
 **Let's Check it!!!**
 https://machiatopage.github.io/
 
-If you have a question and request, don't hesitate to contact me [Kazuki Nakamae, Ph.D.](kazukinakamae@gmail.com).
+If you have a question and request, don't hesitate to contact me.
+
+Kazuki Nakamae, Ph.D.
+- kazukinakamae[at mark]gmail.com
 
 ## References
 
