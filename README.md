@@ -24,7 +24,7 @@ Kazuki Nakamae, Ph.D.
 
 ## References
 
-[1] Nakamae et. al, Detailed profiling with MaChIAto reveals various genomic and epigenomic features affecting the efficacy of knock-out, short homology-based knock-in and Prime Editing. BioArxiv. 2022 https://doi.org/10.1101/2022.06.27.496697
+[1] Nakamae et. al, Detailed profiling with MaChIAto reveals various genomic and epigenomic features affecting the efficacy of knock-out, short homology-based knock-in and Prime Editing. bioRxiv. 2022 https://doi.org/10.1101/2022.06.27.496697
 
 ## Installation of MaChIAto
 
