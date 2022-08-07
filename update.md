@@ -1,5 +1,17 @@
 ### Version History
 
+###　[v1.1] - 
+
+Component Version
+MaChIAto: 1.8.4
+MaChIAto Aligner: 1.0
+collect_MaChIAto_data.py 3.01
+MaChIAto Analyzer: 1.0
+MaChIAto Reviewer: 1.1
+
+##### added
+add a function summerizing the MaChIAto Classification with Unclassified in MaChIAto Reviewer
+
 ###　[v1.0] - 
 
 Component Version

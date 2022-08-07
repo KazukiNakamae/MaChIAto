@@ -22,7 +22,7 @@ message("
 888   T88b \"Y8888   Y88P  888 \"Y8888  \"Y8888888P\"  \"Y8888 888     
                                                                   
                                                                       
-version 1.0
+version 1.1
 ")
 
 help.message <- "
@@ -374,12 +374,13 @@ message(paste("Creating Folder", output.dir, sep=" "))
 comparison.analysis.dir <- file.path(output.dir, "[A]Validation_of_CRISPResso-MaChIAto_classification")
 comparison.analysis.original.dir <- file.path(comparison.analysis.dir, "[a1]Piechart_of_CRISPResso-MaChIAto_classification")
 comparison.analysis.machiato.dir <- file.path(comparison.analysis.dir, "[b1]Piechart_of_original_CRISPResso_classification_filtered_by_crispRvariants")
+comparison.analysis.machiato.with.unclassified.dir <- file.path(comparison.analysis.dir, "[b3]Piechart_of_original_CRISPResso_classification_filtered_by_crispRvariants_with_unclassified")
 mutation.analysis.dir <- file.path(output.dir, "[B]Validation_of_mutation_among_endgenous_sequence")
 imprecise.knockin.analysis.dir <- file.path(output.dir, "[C]Validation_of_junction_sequence_in_imprecise_knock-in")
 ###
 
 
-for(dirname in c(output.dir, comparison.analysis.dir, comparison.analysis.original.dir, comparison.analysis.machiato.dir,
+for(dirname in c(output.dir, comparison.analysis.dir, comparison.analysis.original.dir, comparison.analysis.machiato.dir, comparison.analysis.machiato.with.unclassified.dir,
   mutation.analysis.dir, imprecise.knockin.analysis.dir)){
   dir.create(file.path(dirname), showWarnings=FALSE)
 }
@@ -433,6 +434,8 @@ MakeSummaryClassBarplot(
 ########[b] Sum of MaChIAto Classification
 message("[b]Make a summary of MaChIAto classification")
 
+# without Unclassified
+
 temp.machiato.rate.table.mat <- apply(fltr.res.file.df, MARGIN = 1, function(row){
   if(row["sample.label"] %in% c(untreated.label, negative.ctrl.label, condition1.label, condition2.label)){
 
@@ -458,7 +461,7 @@ temp.machiato.rate.table.mat <- apply(fltr.res.file.df, MARGIN = 1, function(row
     SaveTable(machiato.class.count.table, file.path(comparison.analysis.machiato.dir, paste0(row["sample.name"], "_MaChIAto_classification_table")))
     
     SavePieChart(machiato.class.count.table
-      , c("#D98F4E",  "#A65437", "#F2CA52", "#ADD4D9", "#F2E2CE")
+      , c("#D98F4E", "#A65437", "#F2CA52", "#F2E2CE")
       , "Reads"
       , file.path(comparison.analysis.machiato.dir, paste0(row["sample.name"], "_MaChIAto_classification_piechart.png"))
     )
@@ -479,6 +482,57 @@ MakeSummaryClassBarplot(
   c("#BFBFBF", "#548C1C", "#A60321", "#F20C36"),
   x.label,
   file.path(comparison.analysis.dir, "[b2]Summary_of_CRISPResso_MaChIAto_classification.png")
+)
+
+# with Unclassified
+
+temp.machiato.rate.table.with.unclassified.mat <- apply(fltr.res.file.df, MARGIN = 1, function(row){
+  if(row["sample.label"] %in% c(untreated.label, negative.ctrl.label, condition1.label, condition2.label)){
+
+    temp.all.df <- read.csv(file.path(row["classifier.res.dir.path"], "ALL_dataframe.csv"), header = TRUE)
+    temp.machiato.unclassified.df <- filter(temp.all.df, CRISPResso_reclassification_labels == "Unclassified")
+    temp.machiato.unmodified.df <- filter(temp.all.df, CRISPResso_reclassification_labels == "Unmodified")
+    temp.machiato.nhej.df <- filter(temp.all.df, CRISPResso_reclassification_labels == "NHEJ")
+    temp.machiato.mixed.df <- filter(temp.all.df, CRISPResso_reclassification_labels == "Mixed HDR-NHEJ")
+    temp.machiato.hdr.df <- filter(temp.all.df, CRISPResso_reclassification_labels == "HDR")
+
+    machiato.class.count.sum.vec <- c(sum(temp.machiato.unclassified.df$X.Reads)
+      , sum(temp.machiato.unmodified.df$X.Reads)
+      , sum(temp.machiato.nhej.df$X.Reads)
+      , sum(temp.machiato.mixed.df$X.Reads)
+      , sum(temp.machiato.hdr.df$X.Reads)
+    )
+    names(machiato.class.count.sum.vec) <- c("Unclassified", "Unmodified", "InDel", "Imprecise knock-in", "Precise knock-in")
+    machiato.class.count.table <- data.frame(
+      Class=names(machiato.class.count.sum.vec)
+      , Frequency=machiato.class.count.sum.vec
+      , Percentage=machiato.class.count.sum.vec / sum(machiato.class.count.sum.vec) * 100
+    )
+
+    SaveTable(machiato.class.count.table, file.path(comparison.analysis.machiato.with.unclassified.dir, paste0(row["sample.name"], "_MaChIAto_classification_table_with_unclassified")))
+    
+    SavePieChart(machiato.class.count.table
+      , c("#D98F4E",  "#A65437", "#F2CA52", "#ADD4D9", "#F2E2CE")
+      , "Reads"
+      , file.path(comparison.analysis.machiato.with.unclassified.dir, paste0(row["sample.name"], "_MaChIAto_classification_table_with_unclassified.png"))
+    )
+
+    return(machiato.class.count.table$Percentage)
+
+  }else{
+    return(rep(NA, 5))
+  }
+})
+temp.condition12.machiato.rate.table.mat <- temp.machiato.rate.table.with.unclassified.mat[,complete.cases(t(temp.machiato.rate.table.with.unclassified.mat))]
+rownames(temp.condition12.machiato.rate.table.mat) <- c("Unclassified", "Unmodified", "InDel", "Imprecise knock-in", "Precise knock-in")
+colnames(temp.condition12.machiato.rate.table.mat) <- fltr.res.file.df$sample.name[complete.cases(t(temp.machiato.rate.table.with.unclassified.mat))]
+
+MakeSummaryClassBarplot(
+  temp.condition12.machiato.rate.table.mat,
+  condition1.label,
+  c("#ADD4D9", "#BFBFBF", "#548C1C", "#A60321", "#F20C36"),
+  x.label,
+  file.path(comparison.analysis.dir, "[b4]Summary_of_CRISPResso_MaChIAto_classification_with_unclassified.png")
 )
 
 ########[c] Sum of CRISPResso - BWAMEM-CrispRvariants Classification
