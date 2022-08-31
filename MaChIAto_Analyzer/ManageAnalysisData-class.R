@@ -259,6 +259,9 @@ ManageAnalysisData <- R6Class(
       # Returns:
       #   On success, returns vector of labels including "high", "low" and "out".
       #   On failure, returns ERROR MESSAGE.
+      # 
+      # Cautions:
+      #   Only k=2 is analilable in the recent version.
       tryCatch({
         num.vec <- as.numeric(vec)
         if(sd(num.vec) == 0){
@@ -270,21 +273,24 @@ ManageAnalysisData <- R6Class(
         }
 
         k <- 2
-        if(length(num.vec) > 10){
-          max.k <- 10
-        }else{
-          max.k <- length(num.vec) - 1
-        }
+        # if(length(num.vec) > 10){
+        #  max.k <- 10
+        #}else{
+        #  max.k <- length(num.vec) - 1
+        #}
 
         while(TRUE){
-          should.stop.loop <- FALSE
-          if(k > max.k){
-            message("Clustering is difficult. Set k=2...")
-            k <- 2
-            should.stop.loop <- TRUE
-          }else{
-            message(paste0("Set k=", k, "..."))
-          }
+          #should.stop.loop <- FALSE
+          #if(k > max.k){
+          #  message("Clustering is difficult. Set k=2...")
+          #  k <- 2
+          #  should.stop.loop <- TRUE
+          #}else{
+          #  message(paste0("Set k=", k, "..."))
+          #}
+
+          should.stop.loop <- TRUE # The other script cannot follow the cluster data with k > 2. We turn off the loop algorithm.
+          message(paste0("Set k=", k, "..."))
           set.seed(1)
           # Make clusters
           kmeans.data <- kmeans(num.vec, k)

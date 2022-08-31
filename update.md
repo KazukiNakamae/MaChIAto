@@ -1,5 +1,17 @@
 ### Version History
 
+###　[v1.2] - 
+
+Component Version
+MaChIAto: 1.8.4
+MaChIAto Aligner: 1.1
+collect_MaChIAto_data.py 3.01
+MaChIAto Analyzer: 1.0
+MaChIAto Reviewer: 1.1
+
+##### changed
+fix to k=2 in kmeans because the other component cannot follow the data with k>2 in MaChIAto Analyzer (ManageAnalysisData-class.R)
+
 ###　[v1.1] - 
 
 Component Version
