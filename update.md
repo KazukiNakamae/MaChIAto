@@ -11,7 +11,6 @@ MaChIAto Reviewer: 1.1
 
 ##### changed
 add filter bam file to limit to reads without SA or XA tags (prepare_bam_analysis_each_outcome_pe.sh, prepare_bam_comparing_CRISPResso.sh)
-downgrade libdeflate=1.3 to libdeflate=1.2 due to conda problem
 
 ###　[v1.2] - 
 
