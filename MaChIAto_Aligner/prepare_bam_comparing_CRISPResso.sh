@@ -30,7 +30,7 @@ done;
 # bwa mem mapping
 for dir in "crispresso" "machiato";
   do for file in $(ls -1 $DATADIR"/fake_fastq/"$dir | sed -e 's/\..*$//');
-    do echo $DATADIR"/fake_fastq/"$dir"/"$file".fq";bwa mem -t 1 $INDEXDIR"/wt" $DATADIR"/fake_fastq/"$dir"/"$file".fq" | samtools sort -o $DATADIR"/bam/"$dir"/"$file".bam";# samtools index $DATADIR"/bam/"$dir"/"$file".bam";
+    do echo $DATADIR"/fake_fastq/"$dir"/"$file".fq";bwa mem -t 1 $INDEXDIR"/wt" $DATADIR"/fake_fastq/"$dir"/"$file".fq" | samtools view -h | grep -v -e 'XA:Z:' -e 'SA:Z:' | samtools view -b | samtools sort -o $DATADIR"/bam/"$dir"/"$file".bam";# samtools index $DATADIR"/bam/"$dir"/"$file".bam";
   done;
 done;
 

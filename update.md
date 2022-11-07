@@ -1,10 +1,23 @@
 ### Version History
 
-###　[v1.2] - 
+###　[v1.3] - 
 
 Component Version
 MaChIAto: 1.8.4
 MaChIAto Aligner: 1.1
+collect_MaChIAto_data.py 3.01
+MaChIAto Analyzer: 1.0
+MaChIAto Reviewer: 1.1
+
+##### changed
+add filter bam file to limit to reads without SA or XA tags (prepare_bam_analysis_each_outcome_pe.sh, prepare_bam_comparing_CRISPResso.sh)
+downgrade libdeflate=1.3 to libdeflate=1.2 due to conda problem
+
+###　[v1.2] - 
+
+Component Version
+MaChIAto: 1.8.4
+MaChIAto Aligner: 1.0
 collect_MaChIAto_data.py 3.01
 MaChIAto Analyzer: 1.0
 MaChIAto Reviewer: 1.1

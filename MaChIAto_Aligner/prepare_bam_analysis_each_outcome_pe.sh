@@ -42,20 +42,20 @@ done;
 # bwa mem mapping
 for dir in "mut_type" "other_type";
   do for file in $(ls -1 $DATADIR"/fake_fastq/"$DATATYPE"/"$dir | sed -e 's/\..*$//');
-    do bwa mem -t 1 $INDEXDIR"/wt" $DATADIR"/fake_fastq/"$DATATYPE"/"$dir"/"$file".fq" | samtools sort -o $DATADIR"/bam/"$DATATYPE"/"$dir"/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/"$dir"/"$file".bam";
+    do bwa mem -t 1 $INDEXDIR"/wt" $DATADIR"/fake_fastq/"$DATATYPE"/"$dir"/"$file".fq" | samtools view -h | grep -v -e 'XA:Z:' -e 'SA:Z:' | samtools view -b | samtools sort -o $DATADIR"/bam/"$DATATYPE"/"$dir"/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/"$dir"/"$file".bam";
   done;
 done;
 
 for file in "LEFT_PRECISE_KNOCK_IN" "RIGHT_PRECISE_KNOCK_IN";
-  do bwa mem -t 1 $INDEXDIR"/mmej_ki" $DATADIR"/fake_fastq/"$DATATYPE"/ki_type/"$file".fq" | samtools sort -o $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";
+  do bwa mem -t 1 $INDEXDIR"/mmej_ki" $DATADIR"/fake_fastq/"$DATATYPE"/ki_type/"$file".fq" | samtools view -h | grep -v -e 'XA:Z:' -e 'SA:Z:' | samtools view -b | samtools sort -o $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";
 done;
 
 for file in "LEFT_IMPRECISE_KNOCK_IN" "LEFT_IMPRECISE_KNOCK_IN_COMPLEX" "LEFT_OTHER_MUATIONS" "RIGHT_IMPRECISE_KNOCK_IN" "RIGHT_IMPRECISE_KNOCK_IN_COMPLEX" "RIGHT_OTHER_MUATIONS";
-  do bwa mem -t 1 $INDEXDIR"/nhej_ki" $DATADIR"/fake_fastq/"$DATATYPE"/ki_type/"$file".fq" | samtools sort -o $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";
+  do bwa mem -t 1 $INDEXDIR"/nhej_ki" $DATADIR"/fake_fastq/"$DATATYPE"/ki_type/"$file".fq" | samtools view -h | grep -v -e 'XA:Z:' -e 'SA:Z:' | samtools view -b | samtools sort -o $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/ki_type/"$file".bam";
 done;
 
 for file in "rc_LEFT_IMPRECISE_KNOCK_IN" "rc_LEFT_IMPRECISE_KNOCK_IN_COMPLEX" "rc_LEFT_OTHER_MUATIONS" "rc_RIGHT_IMPRECISE_KNOCK_IN" "rc_RIGHT_IMPRECISE_KNOCK_IN_COMPLEX" "rc_RIGHT_OTHER_MUATIONS";
-  do bwa mem -t 1 $INDEXDIR"/nhej_rc_ki" $DATADIR"/fake_fastq/"$DATATYPE"/rc_ki_type/"$file".fq" | samtools sort -o $DATADIR"/bam/"$DATATYPE"/rc_ki_type/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/rc_ki_type/"$file".bam";
+  do bwa mem -t 1 $INDEXDIR"/nhej_rc_ki" $DATADIR"/fake_fastq/"$DATATYPE"/rc_ki_type/"$file".fq" | samtools view -h | grep -v -e 'XA:Z:' -e 'SA:Z:' | samtools view -b | samtools sort -o $DATADIR"/bam/"$DATATYPE"/rc_ki_type/"$file".bam";samtools index $DATADIR"/bam/"$DATATYPE"/rc_ki_type/"$file".bam";
 done;
 
 echo "done";
