@@ -51,6 +51,7 @@ docker run --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/machiato_analyzer:lates
 docker run --rm -v `pwd`:/DATA -w /DATA -i kazukinakamae/machiato_reviewer:latest Rscript ../MaChIAtoReviewer.R;
 ```
 
+The installation time is approximately <10 minutes.
 Then, if you wish, you can follow the manual below.
 
 - Quick Start: https://machiatopage.github.io/2100/01/02/Quick-Start/
@@ -59,6 +60,9 @@ Then, if you wish, you can follow the manual below.
 - Usage of collect_MaChIAto_data.py: https://machiatopage.github.io/2022/07/27/Usage-of-collect-MaChIAto-data-py/
 - Usage of MaChIAto Analyzer: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Analyzer/
 - Usage of MaChIAto Reviewer: https://machiatopage.github.io/2022/06/22/Usage-of-MaChIAto-Reviewer/
+
+MaChIAto Classifier, MaChIAto Aligner, collect_MaChIAto_data.py, and MaChIAto Reviewer generally take < 1 hour to complete.
+MaChIAto Analyzer generally takes <1 day to complete because the calculation uses numerous variants.
 
 ## Install MaChIAto within the conda environment (Deprecated)
 
