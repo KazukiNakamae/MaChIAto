@@ -68,9 +68,11 @@ The installation time of each MaChIAto function is approximately <10 minutes.
 - MaChIAto Aligner
 - collect_MaChIAto_data.py
 - MaChIAto Reviewer
+
 generally takes < 1 hour to complete the run.
 
 - MaChIAto Analyzer
+
 generally takes <1 day to complete run because the calculation uses numerous variants.
 
 ## Install MaChIAto within the conda environment (Deprecated)
