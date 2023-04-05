@@ -32,6 +32,8 @@ The MaChIAto consists of python and R with various packages other developers est
 
 ## Install MaChIAto using the docker (Strongly Recommended)
 
+MaChIAto can run on any operating system using Docker. Please follow the instruction.
+
 1. Download and install Docker Desktop: https://docs.docker.com/engine/install/#desktop
 
 2. Enter Docker settings menu to adjust the memory allocation (~10G of memory is recommmended)
