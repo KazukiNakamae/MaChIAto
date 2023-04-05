@@ -28,7 +28,7 @@ Kazuki Nakamae, Ph.D.
 
 ## Installation of MaChIAto
 
-The MaChIAto consists of python and R with various packages other developers established. So the installation process is complex. However, you can quickly install MaChIAto using the docker container.
+The MaChIAto consists of python and R with various packages other developers established. So the installation process in the local environment was originally complex. However, you can quickly install MaChIAto using the docker container.
 
 ## Install MaChIAto using the docker (Strongly Recommended)
 
