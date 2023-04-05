@@ -62,14 +62,14 @@ Then, if you wish, you can follow the manual below.
 
 ## Time
 
-The installation time of each MaChIAto function is approximately <10 minutes.
+The installation time of each MaChIAto function is approximately <10 minutes.<br>
 
 - MaChIAto Classifier
 - MaChIAto Aligner
 - collect_MaChIAto_data.py
 - MaChIAto Reviewer
 
-generally takes < 1 hour to complete the run.
+generally takes < 1 hour to complete the run.<br>
 
 - MaChIAto Analyzer
 
